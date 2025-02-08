@@ -4,12 +4,12 @@ const user = require('../models/UsersModel');
 const saveUserShippingDetails = async (req, res) => {
 
     try{
-        const {user_id, address, city, state, pincode, country} = req.body;
-        if(!user_id, !address, !city, !state, !pincode, !country)
+        const {userId, address, city, state, pincode, country} = req.body;
+        if(!userId || !address || !city || !state || !pincode || !country)
         {
             throw new Error('Invalid ID');
         }
-        const data = await user.saveShippingDetails(user_id, address, city, state, pincode, country);
+        const data = await user.saveShippingDetails(userId, address, city, state, pincode, country);
         res.status(200).json(data);
     }
     catch(error)
@@ -23,12 +23,12 @@ const saveUserShippingDetails = async (req, res) => {
 const getUserShippingDetails = async (req, res) => {
 
     try{
-        const {user_id} = req.params;
-        if(!user_id)
+        const {userId} = req.params;
+        if(!userId)
         {
             throw new Error('Invalid ID');
         }
-        const data = await user.getShippingDetails(user_id);
+        const data = await user.getShippingDetails(userId);
         res.status(200).json(data);
     }
     catch(error)
@@ -41,12 +41,12 @@ const getUserShippingDetails = async (req, res) => {
 const updateUserShippingDetails = async (req, res) => {
 
     try{
-        const {user_id, address, city, state, pincode, country} = req.body;
-        if(!user_id, !address, !city, !state, !pincode, !country)
+        const {userId, address, city, state, pincode, country} = req.body;
+        if(!userId || !address || !city || !state || !pincode || !country)
         {
             throw new Error('Invalid ID');
         }
-        const data = await user.updateShippingDetails(user_id, address, city, state, pincode, country);
+        const data = await user.updateShippingDetails(userId, address, city, state, pincode, country);
         res.status(200).json(data);
     }
     catch(error)

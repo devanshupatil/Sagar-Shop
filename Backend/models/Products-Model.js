@@ -8,15 +8,16 @@ const Product = {
     return data;
   },
 
-  getById: async (id) => {
-    if (!id) {
+  getById: async (productId) => {
+    
+    if (!productId) {
       throw new Error('Invalid ID');
     }
     try {
       const { data, error } = await supabase
         .from('products')
         .select('*')
-        .eq('product_id', id);
+        .eq('product_id', productId);
         
       if (error) throw error;
       return data[0];
@@ -26,9 +27,9 @@ const Product = {
     }
   },
 
-  checkProductStock: async (id) => {
+  checkProductStock: async (productId) => {
 
-    if (!id) {
+    if (!productId) {
       throw new Error('Invalid ID');
     }
     try {
@@ -36,7 +37,7 @@ const Product = {
       const { data, error } = await supabase
         .from('products')
         .select('stock_quantity')
-        .eq('product_id', id)
+        .eq('product_id', productId)
         .single();
       if (error) throw error;
 

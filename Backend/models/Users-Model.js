@@ -3,12 +3,12 @@ const supabase = require('../config/database')
 
 const User = {
 
-    saveShippingDetails : async (user_id, address, city, state, pincode, country) => {
+    saveShippingDetails : async (userId, address, city, state, pincode, country) => {
         try {
             const { data, error } = await supabase
             .from('user_addresses')
             .insert({
-                user_id: user_id,
+                user_id: userId,
                 address_line: address,
                 city: city,
                 state: state,
@@ -25,13 +25,13 @@ const User = {
         }
     },
 
-    getShippingDetails : async (user_id) => {
+    getShippingDetails : async (userId) => {
 
         try {
             const { data, error } = await supabase
             .from('user_addresses')
             .select('*')
-            .eq('user_id', user_id)
+            .eq('user_id', userId)
             .single();
             if (error) throw error;
             return data;
@@ -42,7 +42,7 @@ const User = {
         }
     },
 
-    updateShippingDetails : async (user_id, address, city, state, pincode, country) => {
+    updateShippingDetails : async (userId, address, city, state, pincode, country) => {
         try {
             const { data, error } = await supabase
             .from('user_addresses')
@@ -53,7 +53,7 @@ const User = {
                 postal_code: pincode,
                 country: country
             })
-            .eq('user_id', user_id)
+            .eq('user_id', userId)
             .select();
             if (error) throw error;
             return data;

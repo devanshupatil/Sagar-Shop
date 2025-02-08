@@ -4,9 +4,9 @@ const dotenv = require('dotenv');
 const supabase = require('./config/database');
 const port = 4000;
 const cors = require('cors');
-const productRouter = require('./routes/productRoute');
-const cartOrderRouter = require('./routes/Cart-OrderRoute');
-const userRouter = require('./routes/userRoute');
+const productRouter = require('./routes/product-Route');
+const cartOrderRouter = require('./routes/Cart-Order-Route');
+const userRouter = require('./routes/user-Route');
 
 
 // load environment variables from.env file

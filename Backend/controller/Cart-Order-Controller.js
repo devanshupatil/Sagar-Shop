@@ -1,29 +1,29 @@
 // import supabase from "../config/database";
-const CartOrderModel = require( "../models/Cart-OrderModel")
-const ProductModel = require("../models/ProductsModel")
+const CartOrderModel = require( "../models/Cart-Order-Model")
+const ProductModel = require("../models/Products-Model")
 
 const addToCart = async (req, res) => {
 
     
     try{
         
-        const {id, product_id, stock_quantity} = req.params;
+        const {userId, productId, stockQuantity} = req.params;
 
-        if(!id, !product_id, !stock_quantity)
+        if(!userId || !productId || !stockQuantity)
         {
             throw new Error('Invalid ID');
         }
 
-        const product = await ProductModel.getById(product_id);
+        const product = await ProductModel.getById(productId);
         if(!product)
         {
             throw new Error('Product not found');
         }
-        if(product.stock_quantity < stock_quantity)
+        if(product.stock_quantity < stockQuantity)
         {
             throw new Error('Insufficient stock');
         }
-        const data = await CartOrderModel.addToCart(id, product_id, stock_quantity);
+        const data = await CartOrderModel.addToCart(userId, productId, stockQuantity);
         res.status(200).json(data);
         
     }
@@ -38,12 +38,12 @@ const getAllCart = async (req, res) => {
 
     
     try{
-        const {user_id} = req.params;
-        if(!user_id)
+        const {userId} = req.params;
+        if(!userId)
         {
             throw new Error('Invalid ID');
         }
-        const data = await CartOrderModel.getAllCart(user_id);
+        const data = await CartOrderModel.getAllCart(userId);
         res.status(200).json(data);
     }
     catch(error)

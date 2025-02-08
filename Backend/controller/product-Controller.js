@@ -1,4 +1,4 @@
-const products = require("../models/ProductsModel");
+const products = require("../models/Products-Model");
 
 const getProducts = async (req, res) => {
     
@@ -19,8 +19,8 @@ const getProducts = async (req, res) => {
 const getProductById = async (req, res) => {
 
     try {
-        const { id } = req.params;
-        const product = await products.getById(id);
+        const { productId } = req.params;
+        const product = await products.getById(productId);
 
         if (!product) {
             return res.status(404).json({ message: "Product not available" });
@@ -33,8 +33,8 @@ const getProductById = async (req, res) => {
 
 const checkProductStock = async (req, res) => {
     try {
-        const { id } = req.params;
-        const stock = await products.checkProductStock(id);
+        const { productId } = req.params;
+        const stock = await products.checkProductStock(productId);
 
         if (!stock) {
             return res.status(404).json({ message: "Product not available" });

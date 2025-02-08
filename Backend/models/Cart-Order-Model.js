@@ -3,9 +3,9 @@ const supabase = require('../config/database')
 const CartOrder = {
 
 
-    addToCart: async (id, product_id, stock_quantity) => {
+    addToCart: async (userId, productId, stockQuantity) => {
 
-        if(!id)
+        if(!userId)
         {
             throw new Error('Invalid ID');
         }
@@ -16,9 +16,9 @@ const CartOrder = {
             .from('cart')
             .insert([
                 {
-                    user_id: id,
-                    product_id: product_id,
-                    quantity: stock_quantity
+                    user_id: userId,
+                    product_id: productId,
+                    quantity: stockQuantity
                 }
             ])
             .select();
@@ -36,9 +36,9 @@ const CartOrder = {
 
     },
 
-    getAllCart: async (user_id) => {
+    getAllCart: async (userId) => {
 
-        if(!user_id)
+        if(!userId)
         {
             throw new Error('Invalid ID');
         }
@@ -47,7 +47,7 @@ const CartOrder = {
             const { data, error } = await supabase
             .from('cart')
             .select('*')
-            .eq('user_id', user_id);
+            .eq('user_id', userId);
             if(error) throw error;
             return data;
         }
@@ -58,15 +58,15 @@ const CartOrder = {
         }
     },
 
-    createOrder: async (user_id, product_id, product) => {
+    createOrder: async (userId, productId, product) => {
 
         try{
             const { data, error } = await supabase
             .from('orders')
             .insert([
                 { 
-                    user_id: user_id,
-                    product_id: product_id,
+                    user_id: userId,
+                    product_id: productId,
                     total_price: product.price
                 },
             ])
@@ -81,8 +81,8 @@ const CartOrder = {
         }
     },
 
-    getOrdersById: async (user_id) => {
-        if(!user_id)
+    getOrdersById: async (userId) => {
+        if(!userId)
         {
             throw new Error('Invalid ID');
         }
@@ -91,7 +91,7 @@ const CartOrder = {
             const { data, error } = await supabase
             .from('orders')
             .select('*')
-            .eq('user_id', user_id)
+            .eq('user_id', userId)
             .single();
 
             if(error) throw error;
