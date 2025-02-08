@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-// const verifyToken  = require('../middleware/auth');
+const verifyToken  = require('../middleware/auth');
 const { getProducts, getProductById, checkProductStock } = require('../controller/productController');
 
 
-// router.use(verifyToken);
+router.use(verifyToken);
 
 router.get('/products', getProducts);
 
