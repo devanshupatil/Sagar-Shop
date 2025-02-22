@@ -39,9 +39,9 @@ const HomePage = () => {
                 <ChevronLeft className="w-6 h-6 text-white" />
             </button>
 
-            <button 
-            onClick={handleNext}
-            className="absolute right-5 top-80 transform -translate-y-1/2 z-10 bg-gray-600  shadow-md hover:bg-gray-700 rounded-full p-2 cursor-pointer">
+            <button
+                onClick={handleNext}
+                className="absolute right-5 top-80 transform -translate-y-1/2 z-10 bg-gray-600  shadow-md hover:bg-gray-700 rounded-full p-2 cursor-pointer">
                 <ChevronRight className="w-6 h-6 text-white" />
             </button>
 
@@ -58,8 +58,6 @@ const HomePage = () => {
                         <div className="flex flex-col items-center justify-center h-full text-white">
 
                             <img className="absolute inset-0 w-full h-full object-cover object-center" src={images[currentIndex]} alt="" />
-                            
-
 
                         </div>
                     </div>
@@ -77,9 +75,6 @@ const HomePage = () => {
                 ))}
             </div>
 
-            
-
-               
 
 
         </div>

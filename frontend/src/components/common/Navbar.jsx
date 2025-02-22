@@ -10,7 +10,7 @@ const Navbar = () => {
     }
 
     return (
-        <div className="sticky top-16 z-50 bg-white">
+        <div className="sticky top-14 z-50 bg-white">
             <nav className="px-4 py-5">
                 {/* Mobile Menu Button */}
                 <div className="md:hidden">
@@ -40,7 +40,7 @@ const Navbar = () => {
                     <div className="relative group w-full md:w-auto">
                         <li className="cursor-pointer text-center">
                             <span className="hover:text-orange-500 hover:underline hover:underline-offset-15 flex items-center justify-between md:justify-center">
-                                Women <ChevronRight className="h-5 w-5 ml-1 transform rotate-90 group-hover:-rotate-90 transition-all duration-700 ease-in-out" />
+                                Women <ChevronRight className="h-5 w-5 ml-1 transform rotate-90 group-hover:-rotate-90 transition-all duration-300 ease-in-out" />
                             </span>
                         </li>
                         <div className="hidden group-hover:block bg-white px-2 py-2 rounded-md shadow-md md:absolute relative w-1/2 md:w-auto">
@@ -56,7 +56,7 @@ const Navbar = () => {
                     <div className="relative group w-full md:w-auto">
                         <li className="cursor-pointer text-center">
                             <span className="hover:text-orange-500 hover:underline hover:underline-offset-15 flex items-center justify-between md:justify-center">
-                                Men <ChevronRight className="h-5 w-5 ml-1 transform rotate-90 group-hover:-rotate-90 transition-all duration-700 ease-in-out" />
+                                Men <ChevronRight className="h-5 w-5 ml-1 transform rotate-90 group-hover:-rotate-90 transition-all duration-300 ease-in-out" />
                             </span>
                         </li>
                         <div className="hidden group-hover:block bg-white px-2 py-2 rounded-md shadow-md md:absolute relative w-25 ">
@@ -72,7 +72,7 @@ const Navbar = () => {
                     <div className="relative group w-full md:w-auto">
                         <li className="cursor-pointer text-center">
                             <span className="hover:text-orange-500 hover:underline hover:underline-offset-15 flex items-center justify-between md:justify-center">
-                                Kids <ChevronRight className="h-5 w-5 ml-1 transform rotate-90 group-hover:-rotate-90 transition-all duration-700 ease-in-out" />
+                                Kids <ChevronRight className="h-5 w-5 ml-1 transform rotate-90 group-hover:-rotate-90 transition-all duration-300 ease-in-out" />
                             </span>
                         </li>
                         <div className="hidden group-hover:block bg-white px-2 py-2 rounded-md shadow-md md:absolute relative w-25 ">
@@ -86,7 +86,7 @@ const Navbar = () => {
                     <div className="relative group w-full md:w-auto">
                         <li className="cursor-pointer text-center">
                             <span className="hover:text-orange-500 hover:underline hover:underline-offset-15 flex items-center justify-between md:justify-center">
-                                Shoes & Bags <ChevronRight className="h-5 w-5 ml-1 transform rotate-90 group-hover:-rotate-90 transition-all duration-700 ease-in-out" />
+                                Shoes & Bags <ChevronRight className="h-5 w-5 ml-1 transform rotate-90 group-hover:-rotate-90 transition-all duration-300 ease-in-out" />
                             </span>
                         </li>
                         <div className="hidden group-hover:block bg-white px-2 py-2 rounded-md shadow-md md:absolute relative w-25 ">
@@ -100,7 +100,7 @@ const Navbar = () => {
                     <div className="relative group w-full md:w-auto">
                         <li className="cursor-pointer text-center">
                             <span className="hover:text-orange-500 hover:underline hover:underline-offset-15 flex items-center justify-between md:justify-center">
-                                Wedding <ChevronRight className="h-5 w-5 ml-1 transform rotate-90 group-hover:-rotate-90 transition-all duration-700 ease-in-out" />
+                                Wedding <ChevronRight className="h-5 w-5 ml-1 transform rotate-90 group-hover:-rotate-90 transition-all duration-300 ease-in-out" />
                             </span>
                         </li>
                         <div className="hidden group-hover:block bg-white px-2 py-2 rounded-md shadow-md md:absolute relative w-25">
@@ -114,7 +114,7 @@ const Navbar = () => {
                     <div className="relative group w-full md:w-auto">
                         <li className="cursor-pointer text-center">
                             <span className="hover:text-orange-500 hover:underline hover:underline-offset-15 flex items-center justify-between md:justify-center">
-                                Gen Z <ChevronRight className="h-5 w-5 ml-1 transform rotate-90 group-hover:-rotate-90 transition-all duration-700 ease-in-out" />
+                                Gen Z <ChevronRight className="h-5 w-5 ml-1 transform rotate-90 group-hover:-rotate-90 transition-all duration-300 ease-in-out" />
                             </span>
                         </li>
                         <div className="hidden group-hover:block bg-white px-2 py-2 rounded-md shadow-md md:absolute relative w-25">
@@ -128,7 +128,7 @@ const Navbar = () => {
                     <div className="relative group w-full md:w-auto">
                         <li className="cursor-pointer text-center">
                             <span className="hover:text-orange-500 hover:underline hover:underline-offset-15 flex items-center justify-between md:justify-center">
-                                Winterwear <ChevronRight className="h-5 w-5 ml-1 transform rotate-90 group-hover:-rotate-90 transition-all duration-700 ease-in-out" />
+                                Winterwear <ChevronRight className="h-5 w-5 ml-1 transform rotate-90 group-hover:-rotate-90 transition-all duration-300 ease-in-out" />
                             </span>
                         </li>
                         <div className="hidden group-hover:block bg-white px-2 py-2 rounded-md shadow-md md:absolute relative w-25">

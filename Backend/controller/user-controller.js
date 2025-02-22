@@ -1,4 +1,4 @@
-const user = require('../models/UsersModel');
+const user = require('../models/users-model');
 
 
 const saveUserShippingDetails = async (req, res) => {
@@ -56,8 +56,27 @@ const updateUserShippingDetails = async (req, res) => {
     }
 }
 
+const deleteUserShippingDetails = async (req, res) => {
+
+    try{
+        const {userId} = req.params;
+        if(!userId)
+        {
+            throw new Error('Invalid ID');
+        }
+        const data = await user.deleteShippingDetails(userId);
+        res.status(200).json(data);
+    }
+    catch(error)
+    {
+        console.error('Error deleting shipping details:', error);
+        throw new Error('Server Error: Unable to delete shipping details');
+    }
+}
+
 module.exports = {
     saveUserShippingDetails,
     getUserShippingDetails,
-    updateUserShippingDetails
+    updateUserShippingDetails,
+    deleteUserShippingDetails
 }

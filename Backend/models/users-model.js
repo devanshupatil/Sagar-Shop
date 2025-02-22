@@ -62,6 +62,22 @@ const User = {
             console.error('Error updating shipping details:', error);
             throw new Error('Server Error: Unable to update shipping details');
         }
+    },
+
+    deleteShippingDetails : async (userId) => {
+        try {
+            const { data, error } = await supabase
+            .from('user_addresses')
+            .delete()
+            .eq('user_id', userId)
+            .select();
+            if (error) throw error;
+            return data;
+        }
+        catch (error) {
+            console.error('Error deleting shipping details:', error);
+            throw new Error('Server Error: Unable to delete shipping details');
+        }
     }
 
 }

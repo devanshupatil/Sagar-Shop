@@ -4,9 +4,11 @@ const dotenv = require('dotenv');
 const supabase = require('./config/database');
 const port = 4000;
 const cors = require('cors');
-const productRouter = require('./routes/product-Route');
-const cartOrderRouter = require('./routes/Cart-Order-Route');
-const userRouter = require('./routes/user-Route');
+const productRouter = require('./routes/product-route');
+const cartOrderRouter = require('./routes/cart-order-route');
+const userRouter = require('./routes/user-route');
+const Wishlist = require('./routes/wishlist-routes');
+
 
 
 // load environment variables from.env file
@@ -47,6 +49,7 @@ app.use(express.json());
 app.use('/api', productRouter);
 app.use('/api', cartOrderRouter);
 app.use('/api', userRouter);
+app.use('/api', Wishlist);
 
 // Start server
 app.listen(port, () => {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { saveUserShippingDetails, getUserShippingDetails, updateUserShippingDetails } = require('../controller/user-Controller');
+const { saveUserShippingDetails, getUserShippingDetails, updateUserShippingDetails } = require('../controller/user-controller');
 
 router.post('/users/shipping-details', saveUserShippingDetails);
 router.get('/users/shipping-details/:userId', getUserShippingDetails);

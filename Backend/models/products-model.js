@@ -21,6 +21,7 @@ const Product = {
         
       if (error) throw error;
       return data[0];
+      
     } catch (error) {
       console.error('Error fetching product:', error);
       throw new Error('Server Error: Unable to retrieve product');
