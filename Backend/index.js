@@ -29,8 +29,9 @@ app.use(cors({
   origin: [
     'http://localhost:4000',  // Local development
     'http://localhost:5173',
-    'https://wishlist-manager-app.netlify.app',  // Production frontend
-    'https://wishlist-manager-application.onrender.com'  // If needed
+    'https://sagar-shop.onrender.com', 
+    'https://sagarshop.vercel.app/' // Local development
+     // If needed
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
