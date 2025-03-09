@@ -30,7 +30,7 @@ app.use(cors({
     'http://localhost:4000',  // Local development
     'http://localhost:5173',
     'https://sagar-shop.onrender.com', 
-    'https://sagarshop.vercel.app/' // Local development
+    'https://sagarshop.vercel.app' // Local development
      // If needed
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
