@@ -2,14 +2,12 @@ const express = require('express')
 const app = express()
 const dotenv = require('dotenv');
 const supabase = require('./config/database');
-const port = 4000;
+const port = 4100;
 const cors = require('cors');
 const productRouter = require('./routes/product-route');
 const cartOrderRouter = require('./routes/cart-order-route');
 const userRouter = require('./routes/user-route');
 const Wishlist = require('./routes/wishlist-routes');
-
-
 
 // load environment variables from.env file
 dotenv.config();
@@ -40,6 +38,8 @@ app.use(cors({
 }));
 
 app.options('*', cors());
+
+
 
 
 // // Middleware

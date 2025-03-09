@@ -78,6 +78,22 @@ const User = {
             console.error('Error deleting shipping details:', error);
             throw new Error('Server Error: Unable to delete shipping details');
         }
+    },
+
+    getUserById : async (userId) => {
+        try {
+            const { data, error } = await supabase
+            .from('user_profiles')
+            .select('*')
+            .eq('user_id', userId)
+            .single();
+            if (error) throw error;
+            return data;
+        }
+        catch (error) {
+            console.error('Error getting user:', error);
+            throw new Error('Server Error: Unable to get user');
+        }
     }
 
 }

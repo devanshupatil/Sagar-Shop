@@ -45,10 +45,10 @@ const Navbar = () => {
                         </li>
                         <div className="hidden group-hover:block bg-white px-2 py-2 rounded-md shadow-md md:absolute relative w-1/2 md:w-auto">
                             <ul className="space-y-2">
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/women/dresses">Dresses</Link></li>
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/women/tops">Tops</Link></li>
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/women/bottoms">Bottoms</Link></li>
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/women/outerwear">Outerwear</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/women/dresses">Dresses</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/women/tops">Tops</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/women/bottoms">Bottoms</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/women/outerwear">Outerwear</Link></li>
                             </ul>
                         </div>
                     </div>
@@ -61,10 +61,10 @@ const Navbar = () => {
                         </li>
                         <div className="hidden group-hover:block bg-white px-2 py-2 rounded-md shadow-md md:absolute relative w-25 ">
                             <ul className="space-y-2">
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/men/dresses">Shirts</Link></li>
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/men/tops">T-Shirts</Link></li>
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/men/bottoms">Pants</Link></li>
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/men/outerwear">Jackets</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/men/shirt">Shirts</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/men/t-shirt">T-Shirts</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/men/pants">Pants</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/men/jacket">Jackets</Link></li>
                             </ul>
                         </div>
                     </div>
@@ -77,8 +77,8 @@ const Navbar = () => {
                         </li>
                         <div className="hidden group-hover:block bg-white px-2 py-2 rounded-md shadow-md md:absolute relative w-25 ">
                             <ul className="space-y-2">
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/kids/girls">Girls</Link></li>
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/kids/boys">Boys</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/kids/girls">Girls</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/kids/boys">Boys</Link></li>
                             </ul>
                         </div>
                     </div>
@@ -91,8 +91,8 @@ const Navbar = () => {
                         </li>
                         <div className="hidden group-hover:block bg-white px-2 py-2 rounded-md shadow-md md:absolute relative w-25 ">
                             <ul className="space-y-2">
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/shoes-bags/shoes">Shoes</Link></li>
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/shoes-bags/bags">Bags</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/shoes-bags/shoes">Shoes</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/shoes-bags/bags">Bags</Link></li>
                             </ul>
                         </div>
                     </div>
@@ -105,8 +105,8 @@ const Navbar = () => {
                         </li>
                         <div className="hidden group-hover:block bg-white px-2 py-2 rounded-md shadow-md md:absolute relative w-25">
                             <ul className="space-y-2">
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/wedding/dresses">Dresses</Link></li>
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/wedding/shoes">Shoes</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/wedding/dresses">Dresses</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/wedding/shoes">Shoes</Link></li>
                             </ul>
                         </div>
                     </div>
@@ -119,8 +119,8 @@ const Navbar = () => {
                         </li>
                         <div className="hidden group-hover:block bg-white px-2 py-2 rounded-md shadow-md md:absolute relative w-25">
                             <ul className="space-y-2">
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/gen-z/watches">Watches</Link></li>
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/gen-z/hoodies">Hoodies</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/gen-z/watches">Watches</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/gen-z/hoodies">Hoodies</Link></li>
                             </ul>
                         </div>
                     </div>
@@ -133,8 +133,8 @@ const Navbar = () => {
                         </li>
                         <div className="hidden group-hover:block bg-white px-2 py-2 rounded-md shadow-md md:absolute relative w-25">
                             <ul className="space-y-2">
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/winterwear/womens">Womens</Link></li>
-                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/winterwear/mens">Mens</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/winterwear/womens">Womens</Link></li>
+                                <li className="hover:text-orange-500 cursor-pointer"><Link to="/filter/winterwear/mens">Mens</Link></li>
                             </ul>
                         </div>
                     </div>

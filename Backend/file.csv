@@ -1,0 +1,4 @@
+heading, product_name, price, stock_quantity, description, image, mrp, product_type, inFrontpage, isDeleted
+Apple iPhone 12, Apple iPhone 12, 99999, 100, Apple iPhone 12, apple-iphone-12.jpg, 109999, Mobiles, true, false
+Samsung Galaxy S21, Samsung Galaxy S21, 69999, 50, Samsung Galaxy S21, samsung-galaxy-s21.jpg, 79999, Mobiles, true, false
+Samsung QN90A Neo QLED 4K Smart TV, Samsung QN90A Neo QLED 4K Smart TV, 189999, 20, Samsung QN90A Neo QLED 4K Smart TV, samsung-qn90a-neo-qled-4k-smart-tv.jpg, 229999, TVs, true, false

@@ -58,6 +58,30 @@ const CartOrder = {
         }
     },
 
+    getCartById : async( userId, productId) => {
+
+        if(!productId || !userId)
+        {
+            throw new Error('Invalid ID');
+        }
+
+        try{
+            const { data, error } = await supabase
+            .from('cart')
+            .select('*')
+            .eq('user_id', userId)
+            .eq('product_id', productId)
+            if(error) throw error;
+            return data;
+        }
+        catch(error)
+        {
+            console.error('Error getting cart:', error);
+            throw new Error('Server Error: Unable to get cart');
+        }
+
+    },
+
     updateCart: async (cartId, newQuantity) => {
 
         try{
@@ -75,7 +99,7 @@ const CartOrder = {
         }
     },
 
-    createOrder: async (userId, productId, product) => {
+    createOrder: async (userId, productId, product, stockQuantity, transactionId, shippingAddress) => {
 
         try{
             const { data, error } = await supabase
@@ -84,7 +108,10 @@ const CartOrder = {
                 { 
                     user_id: userId,
                     product_id: productId,
-                    total_price: product.price
+                    total_amount: product.price,
+                    quantity: stockQuantity,
+                    transaction_id: transactionId,
+                    shipping_address: shippingAddress
                 },
             ])
             .select();
@@ -109,7 +136,7 @@ const CartOrder = {
             .from('orders')
             .select('*')
             .eq('user_id', userId)
-            .single();
+            .select();
 
             if(error) throw error;
             return data;
@@ -140,6 +167,68 @@ const CartOrder = {
             throw new Error('Server Error: Unable to remove product');
         }
 
+    },
+
+    getOrderById: async (userId, orderId) => {
+
+        if(!userId || !orderId)
+        {
+            throw new Error('Invalid ID');
+        }
+
+        try{
+            const { data, error } = await supabase
+            .from('orders')
+            .select('*')
+            .eq('user_id', userId)
+            .eq('order_id', orderId)
+            .select();
+            if(error) throw error;
+            return data;
+        }
+        catch(error)
+        {
+            console.error('Error fetching order:', error);
+            throw new Error('Server Error: Unable to retrieve order');
+        }
+    },
+
+    getAllOrders: async () => {
+
+        try{
+            const { data, error } = await supabase
+            .from('orders')
+            .select('*');
+            if(error) throw error;
+            return data;
+        }
+        catch(error)
+        {
+            console.error('Error fetching orders:', error);
+            throw new Error('Server Error: Unable to retrieve orders');
+        }
+    },
+
+    updateOderStatus: async (orderId, newStatus) => {
+
+        if(!orderId || !newStatus)
+        {
+            throw new Error('Invalid ID');
+        }
+
+        try{
+            const { data, error } = await supabase
+            .from('orders')
+            .update({ order_status: newStatus })
+            .eq('order_id', orderId);
+            if(error) throw error;
+            return data;
+        }
+        catch(error)
+        {
+            console.error('Error updating order status:', error);
+            throw new Error('Server Error: Unable to update order status');
+        }
     }
 }
 

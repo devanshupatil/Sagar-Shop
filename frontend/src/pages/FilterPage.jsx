@@ -1,28 +1,59 @@
 import { useState, useEffect } from "react";
-// import { toast } from "react-toastify";
 import { Loader } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+
 
 const ProductCard = () => {
 
+    const { category, productType } = useParams();
     const [products, setProducts] = useState([]);
     const URL = import.meta.env.VITE_BACKEND_URL;
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
+    const fetchProducts = async () => {
+
+        setIsLoading(true);
+        try {
+            const response = await fetch(`${URL}/api/products`);
+            const data = await response.json();
+            setProducts(data);
+        } catch (error) {
+            console.log(error);
+        }
+        setIsLoading(false);
+    };
     useEffect(() => {
-
-        const fetchProducts = async () => {
-            setIsLoading(true);
-            try {
-                const response = await fetch(`${URL}/api/products`);
-                const data = await response.json();
-                setProducts(data);
-            } catch (error) {
-                console.log(error);
-            }
-            setIsLoading(false);
-        };
         fetchProducts();
     }, []);
+
+    const filterProducts = () => {
+
+        try {
+            const filteredProducts = products.filter(product => product.category === category && product.product_type === productType);
+            console.log(filteredProducts);
+
+            if (filteredProducts.length > 0) {
+
+                setProducts(filteredProducts);
+
+            }
+            else {
+
+                navigate('/product-not-found');
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+        
+
+    }
+    useEffect(() => {
+        filterProducts();
+    }, []);
+
+   
 
     return (
         <div>
@@ -31,7 +62,10 @@ const ProductCard = () => {
                     <Loader className="h-10 w-10 animate-spin rounded-full border-gray-900"></Loader>
                 </div>
             )}
+
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 p-9">
+
+
 
                 {products ? products.filter(product => product.inFrontpage).map((product) => (
                     <div

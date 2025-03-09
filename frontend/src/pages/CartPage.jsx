@@ -255,9 +255,9 @@ function CartPage() {
                                                 <p className="text-sm text-gray-500">{product.description}</p>
 
                                                 <div className="flex items-center gap-4 mt-4">
-                                                    <span className="text-xl font-bold">₹{product.price ? product.price.toLocaleString('en-IN') : 'N/A'}</span>
-                                                    <span className="text-gray-500 line-through">₹{product.mrp ? product.mrp.toLocaleString('en-IN') : 'N/A'}</span>
-                                                    <span className="text-green-600">{product.mrp && product.price && (100 - Math.round((product.price / product.mrp) * 100))}% off</span>
+                                                    <span className="text-xl font-bold">₹{payable.toLocaleString('en-IN')}</span>
+                                                    <span className="text-gray-500 line-through">₹{total.toLocaleString('en-IN')}</span>
+                                                    <span className="text-green-600">{total && payable && (100 - Math.round((payable / total) * 100))}% off</span>
                                                 </div>
 
                                                 <div className="flex items-center gap-6 mt-4">
@@ -283,9 +283,6 @@ function CartPage() {
                                                     </div>
                                                     <button onClick={() => handleRemoveFromCart(userId, product.product_id)} className="font-medium cursor-pointer">REMOVE</button>
                                                 </div>
-                                            </div>
-                                            <div className="text-sm text-gray-600">
-                                                Delivery by Fri Feb 14 | <span className="text-green-600">Free</span>
                                             </div>
                                         </div>
                                     </div>
@@ -326,16 +323,6 @@ function CartPage() {
                                     <div className="flex justify-between">
                                         <span>Discount</span>
                                         <span className="text-green-600">− ₹{discount ? discount.toLocaleString('en-IN') : 'N/A'}</span>
-                                    </div>
-
-                                    <div className="flex justify-between">
-                                        <span>Delivery Charges</span>
-                                        <span className="text-green-600">Free</span>
-                                    </div>
-
-                                    <div className="flex justify-between">
-                                        <span>Secured Packaging Fee</span>
-                                        <span>₹59</span>
                                     </div>
 
                                     <div className="flex justify-between font-bold text-lg pt-4 border-t">

@@ -74,9 +74,28 @@ const deleteUserShippingDetails = async (req, res) => {
     }
 }
 
+const getUserById = async (req, res) => {
+
+    try{
+        const {userId} = req.params;
+        if(!userId)
+        {
+            throw new Error('Invalid ID');
+        }
+        const data = await user.getUserById(userId);
+        res.status(200).json(data);
+    }
+    catch(error)
+    {
+        console.error('Error getting user:', error);
+        throw new Error('Server Error: Unable to get user');
+    }
+}
+
 module.exports = {
     saveUserShippingDetails,
     getUserShippingDetails,
     updateUserShippingDetails,
-    deleteUserShippingDetails
+    deleteUserShippingDetails,
+    getUserById
 }

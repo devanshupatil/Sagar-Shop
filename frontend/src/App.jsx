@@ -11,6 +11,12 @@ import Product from './pages/ProductPage';
 import Cart from './pages/CartPage';
 import Favourites from './pages/FavouritesPage';
 import Checkout from './pages/CheckOut';
+import OrdersPage from './pages/OrdersPage';
+import ProfilePage from './pages/ProfilePage';
+import SuccessPage from './pages/SuccessPage';
+import FilterPage from './pages/FilterPage';
+import ProductNotFound from './components/common/ProductNotFound';
+import AdminPage from './pages/AdminPage';
 
 function App() {
   return (
@@ -67,12 +73,60 @@ function App() {
             </div>}
           />
           <Route
+            path="/orders"
+            element={<div className="w-full h-full flex flex-col">
+              <Header />
+              <Navbar />
+              <OrdersPage />
+              <Footer />
+            </div>}
+          />
+          <Route
+            path="/profile"
+            element={<div className="w-full h-full flex flex-col">
+              <Header />
+              <Navbar />
+              <ProfilePage />
+              <Footer />
+            </div>}
+          />
+          <Route
             path="/checkout/:id"
             element={<div className="w-full h-full flex flex-col">
               <Header />
               {/* <Navbar /> */}
               <Checkout />
               <Footer />
+            </div>}
+          />
+          <Route
+            path="/success/:productId/:orderId"
+            element={<div className="w-full h-full flex flex-col">
+              <Header />
+              {/* <Navbar /> */}
+              <SuccessPage/>
+              <Footer />
+            </div>}
+          />
+          <Route
+            path="/filter/:category/:productType"
+            element={<div className="w-full h-full flex flex-col">
+              <Header />
+              <Navbar />
+              <FilterPage />
+              <Footer />
+            </div>}
+          />
+          <Route
+            path="/product-not-found"
+            element={<div className="w-full h-full flex flex-col">
+              <ProductNotFound />
+            </div>}
+          />
+          <Route
+            path="/admin"
+            element={<div className="w-full h-full flex flex-col">
+              <AdminPage />
             </div>}
           />
 
