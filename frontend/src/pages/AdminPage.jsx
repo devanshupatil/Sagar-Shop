@@ -8,11 +8,6 @@ import {
     Search,
     Edit,
     Trash,
-    CheckCircle,
-    Truck,
-    Clock,
-    XCircle,
-    Loader
 } from 'lucide-react';
 
 // const Product = {
@@ -131,24 +126,6 @@ function AdminPage() {
 
 
 
-
-    // const getStatusIcon = (status) => {
-
-    //     switch (status) {
-    //         case 'Pending':
-    //             return <Clock className="text-yellow-500" />;
-    //         case 'Processing':
-    //             return <Clock className="text-blue-500" />;
-    //         case 'Shipped':
-    //             return <Truck className="text-purple-500" />;
-    //         case 'delivered':
-    //             return <CheckCircle className="text-green-500" />;
-    //         case 'cancelled':
-    //             return <XCircle className="text-red-500" />;
-    //         default:
-    //             return null;
-    //     }
-    // };
 
     const filteredProducts = products.filter(product => {
         const matchesStatus = selectedStatus === 'all' || product.status === selectedStatus;
