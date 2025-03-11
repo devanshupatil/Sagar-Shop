@@ -69,6 +69,10 @@ function Product() {
 
 
   useEffect(() => {
+
+    if(!userId){
+     navigate('/login');
+    }
     fetchData();
 
   }, [])
