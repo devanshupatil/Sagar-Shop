@@ -1,4 +1,4 @@
-import { Heart, ShoppingCart, Info, Check, Loader } from 'lucide-react';
+import { Heart, ShoppingCart, Info, Check, Loader,} from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
@@ -16,10 +16,13 @@ function Product() {
   const [isBuyNowLoading, setIsBuyNowLoading] = useState(false);
   const [isInWishlist, setIsInWishlist] = useState(false);
   const { getAccessToken } = useAuth();
-  const userId = JSON.parse(atob(getAccessToken().split('.')[1])).sub;
+  const [isLoading, setIsLoading] = useState(false);
+
 
 
   const fetchData = async () => {
+
+    setIsLoading(true);
 
     try {
       const response = await fetch(`${URL}/api/products/${productId}`, {
@@ -38,13 +41,25 @@ function Product() {
       console.error('Error fetching products:', error);
       toast.error('Failed to fetch data');
     }
+    finally {
+      setIsLoading(false);
+    }
 
   }
 
-  const Wishlist = async (userId, productId) => {
+  const Wishlist = async (productId) => {
+
+    if (!getAccessToken()) {
+      navigate('/login');
+      return;
+    }
+
+    const userId = JSON.parse(atob(getAccessToken().split('.')[1])).sub;
+
+
 
     try {
-      
+
       const response = await fetch(`${URL}/api/wishlist/${userId}/${productId}`, {
         method: 'GET',
         headers: {
@@ -53,10 +68,10 @@ function Product() {
       });
       const data = await response.json();
 
-      if(data){
+      if (data) {
         setIsInWishlist(true);
       }
-      else{
+      else {
         setIsInWishlist(false);
       }
     }
@@ -69,12 +84,6 @@ function Product() {
 
 
   useEffect(() => {
-
-    console.log(getAccessToken());
-
-    if(!getAccessToken()){
-     navigate('/login');
-    }
     fetchData();
 
   }, [])
@@ -82,6 +91,11 @@ function Product() {
 
   const handleAddToCart = async (productId) => {
     setIsAddedToCartLodding(true);
+    if (!getAccessToken()) {
+      navigate('/login');
+      return;
+    }
+    const userId = JSON.parse(atob(getAccessToken().split('.')[1])).sub;
 
     try {
 
@@ -114,6 +128,11 @@ function Product() {
   const handleBuyNow = async (productId) => {
     setIsBuyNowLoading(true);
 
+    if (!getAccessToken()) {
+      navigate('/login');
+      return;
+    }
+
     try {
 
       // const response = await fetch(`${URL}/api/checkout/${1}/${id}`, {
@@ -145,26 +164,6 @@ function Product() {
   }
 
 
-  const addToWishlist = async (userId, productId) => {
-    try {
-
-      const response = await fetch(`${URL}/api/add-to-wishlist/${userId}/${productId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${getAccessToken()}`
-        },
-
-      });
-
-      const data = await response.json();
-      console.log(data)
-
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   if (!product) {
     return (
 
@@ -190,108 +189,113 @@ function Product() {
   return (
     <div className="min-h-screen bg-gray-50">
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Product Images */}
-          <div className="space-y-6">
-            <div className="bg-white p-8 rounded-lg shadow-sm relative">
-              <button
-                className={`cursor-pointer absolute top-4 right-4 p-2 rounded-full ${isInWishlist ? 'bg-red-500' : 'text-gray-400'}`}
-                onClick={() => addToWishlist(userId, product.product_id)}
-              >
-                <Heart
-                  className={`w-6 h-6 ${isInWishlist ? 'text-white' : 'text-gray-400'}`} />
-              </button>
-              <img
-                src={product.image}
-                alt="Product view"
-                className="w-full h-auto"
-              />
-            </div>
-            <div className="grid grid-cols-4 gap-4">
-              {[1, 2, 3, 4].map((i) => (
-                <button key={i} className="bg-white p-2 rounded-lg shadow-sm hover:ring-2 hover:ring-blue-500">
-                  <img
-                    src="https://images.unsplash.com/photo-1616711906333-23cf8b122d38?auto=format&fit=crop&q=80&w=200"
-                    alt={`Product view ${i}`}
-                    className="w-full h-auto"
-                  />
+      {isLoading ? (
+        <div className="flex items-center justify-center">
+          <Loader className="h-10 w-10 animate-spin rounded-full border-orange-500 orange mt-50" />
+        </div>
+      ):(
+        <div className="container mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Product Images */}
+            <div className="space-y-6">
+              <div className="bg-white p-8 rounded-lg shadow-sm relative">
+                <button
+                  className={`cursor-pointer absolute top-4 right-4 p-2 rounded-full ${isInWishlist ? 'bg-red-500' : 'text-gray-400'}`}
+                  onClick={() => Wishlist(product.product_id)}
+                >
+                  <Heart
+                    className={`w-6 h-6 ${isInWishlist ? 'text-white' : 'text-gray-400'}`} />
                 </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Product Info */}
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-2xl font-semibold text-gray-900 mb-2">
-                {product.heading}
-              </h1>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-1">
-                  <span className="bg-green-500 text-white px-2 py-1 rounded text-sm">4.4 ★</span>
-                  <span className="text-sm text-gray-500">1,791 Ratings & 151 Reviews</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Check className="w-4 h-4 text-blue-600" />
-                  <span className="text-sm text-gray-700">Assured</span>
-                </div>
+                <img
+                  src={product.image}
+                  alt="Product view"
+                  className="w-full h-auto"
+                />
               </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <span className="text-3xl font-bold">{product.price ? product.price.toLocaleString('en-IN') : 'N/A'}</span>
-                <span className="text-gray-500 line-through">₹{product.mrp ? product.mrp.toLocaleString('en-IN') : 'N/A'}</span>
-                <span className="text-green-600 font-semibold">{product.mrp && product.price && (100 - Math.round((product.price / product.mrp) * 100))}% off</span>
-                <Info className="w-4 h-4 text-gray-400" />
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="font-semibold">Available offers</h3>
-              <div className="space-y-3">
-                {[
-                  'Bank Offer: 5% Unlimited Cashback on Flipkart Axis Bank Credit Card',
-                  'Bank Offer: 10% instant discount on SBI Credit Card EMI Transactions',
-                  'Bank Offer: 10% off on BOBCARD Transactions',
-                  'Special Price: Get extra 41% off (price inclusive of cashback/coupon)'
-                ].map((offer, i) => (
-                  <div key={i} className="flex items-start gap-2">
-                    <div className="p-1 bg-green-100 rounded">
-                      <Check className="w-4 h-4 text-green-600" />
-                    </div>
-                    <p className="text-sm text-gray-700">{offer}</p>
-                  </div>
+              <div className="grid grid-cols-4 gap-4">
+                {[1, 2, 3, 4].map((i) => (
+                  <button key={i} className="bg-white p-2 rounded-lg shadow-sm hover:ring-2 hover:ring-blue-500">
+                    <img
+                      src="https://images.unsplash.com/photo-1616711906333-23cf8b122d38?auto=format&fit=crop&q=80&w=200"
+                      alt={`Product view ${i}`}
+                      className="w-full h-auto"
+                    />
+                  </button>
                 ))}
               </div>
             </div>
 
+            {/* Product Info */}
+            <div className="space-y-6">
+              <div>
+                <h1 className="text-2xl font-semibold text-gray-900 mb-2">
+                  {product.heading}
+                </h1>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-1">
+                    <span className="bg-green-500 text-white px-2 py-1 rounded text-sm">4.4 ★</span>
+                    <span className="text-sm text-gray-500">1,791 Ratings & 151 Reviews</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Check className="w-4 h-4 text-blue-600" />
+                    <span className="text-sm text-gray-700">Assured</span>
+                  </div>
+                </div>
+              </div>
 
-            <div className="flex gap-4 pt-6">
-              <button
-                onClick={() => handleAddToCart(product.product_id)}
-                className="cursor-pointer flex-1 bg-orange-500 text-white py-4 rounded-lg font-semibold hover:bg-orange-600 flex items-center justify-center gap-2">
-                {isAddedToCartLodding ? <Loader className="w-5 h-5" /> : <ShoppingCart className="w-5 h-5" />}
-                {isAddedToCartLodding ? 'ADDING...' : 'ADD TO CART'}
-              </button>
-              <button
-                onClick={() => handleBuyNow(product.product_id)}
-                className="cursor-pointer flex-1 bg-orange-600 text-white py-4 rounded-lg font-semibold hover:bg-orange-700 flex items-center justify-center gap-2">
-                {isBuyNowLoading ? <Loader className="w-5 h-5" /> : <ShoppingCart className="w-5 h-5" />}
-                {isBuyNowLoading ? 'LOADING...' : 'BUY NOW'}
-              </button>
-            </div>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-3xl font-bold">{product.price ? product.price.toLocaleString('en-IN') : 'N/A'}</span>
+                  <span className="text-gray-500 line-through">₹{product.mrp ? product.mrp.toLocaleString('en-IN') : 'N/A'}</span>
+                  <span className="text-green-600 font-semibold">{product.mrp && product.price && (100 - Math.round((product.price / product.mrp) * 100))}% off</span>
+                  <Info className="w-4 h-4 text-gray-400" />
+                </div>
+              </div>
 
-            {/* <div className="flex items-center gap-4">
+              <div className="space-y-4">
+                <h3 className="font-semibold">Available offers</h3>
+                <div className="space-y-3">
+                  {[
+                    'Bank Offer: 5% Unlimited Cashback on Flipkart Axis Bank Credit Card',
+                    'Bank Offer: 10% instant discount on SBI Credit Card EMI Transactions',
+                    'Bank Offer: 10% off on BOBCARD Transactions',
+                    'Special Price: Get extra 41% off (price inclusive of cashback/coupon)'
+                  ].map((offer, i) => (
+                    <div key={i} className="flex items-start gap-2">
+                      <div className="p-1 bg-green-100 rounded">
+                        <Check className="w-4 h-4 text-green-600" />
+                      </div>
+                      <p className="text-sm text-gray-700">{offer}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+
+              <div className="flex gap-4 pt-6">
+                <button
+                  onClick={() => handleAddToCart(product.product_id)}
+                  className="cursor-pointer flex-1 bg-orange-500 text-white py-4 rounded-lg font-semibold hover:bg-orange-600 flex items-center justify-center gap-2">
+                  {isAddedToCartLodding ? <Loader className="w-5 h-5" /> : <ShoppingCart className="w-5 h-5" />}
+                  {isAddedToCartLodding ? 'ADDING...' : 'ADD TO CART'}
+                </button>
+                <button
+                  onClick={() => handleBuyNow(product.product_id)}
+                  className="cursor-pointer flex-1 bg-orange-600 text-white py-4 rounded-lg font-semibold hover:bg-orange-700 flex items-center justify-center gap-2">
+                  {isBuyNowLoading ? <Loader className="w-5 h-5" /> : <ShoppingCart className="w-5 h-5" />}
+                  {isBuyNowLoading ? 'LOADING...' : 'BUY NOW'}
+                </button>
+              </div>
+
+              {/* <div className="flex items-center gap-4">
               <span className="font-semibold">Description:</span>
               <p className="text-gray-600">{product.description}</p>
             </div> */}
-          </div>
+            </div>
 
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

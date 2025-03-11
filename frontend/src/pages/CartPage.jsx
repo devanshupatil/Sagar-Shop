@@ -16,8 +16,7 @@ function CartPage() {
     const URL = import.meta.env.VITE_BACKEND_URL;
     const [isProduct, setisProduct] = useState(false);
     const { getAccessToken } = useAuth();
-    const userId = JSON.parse(atob(getAccessToken().split('.')[1])).sub;
-    // console.log(carts)
+    
 
     // Fetch Carts
     const fetchCarts = async () => {
@@ -29,7 +28,7 @@ function CartPage() {
             console.log("token not found")
             return;
         }
-        console.log(token)
+        
         const userId = JSON.parse(atob(token.split('.')[1])).sub;
 
         if (!userId) {
@@ -174,7 +173,15 @@ function CartPage() {
 
 
     // Handle Remove From Cart
-    const handleRemoveFromCart = async (userId, productId) => {
+    const handleRemoveFromCart = async (productId) => {
+
+        if (!getAccessToken()) {
+            navigate('/login');
+            return;
+          }
+
+        const userId = JSON.parse(atob(getAccessToken().split('.')[1])).sub;
+
         if (!userId || !productId) {
             console.error('Invalid ID');
             return;
@@ -282,7 +289,7 @@ function CartPage() {
                                                             <Plus className="w-4 h-4" />
                                                         </button>
                                                     </div>
-                                                    <button onClick={() => handleRemoveFromCart(userId, product.product_id)} className="font-medium cursor-pointer">REMOVE</button>
+                                                    <button onClick={() => handleRemoveFromCart(product.product_id)} className="font-medium cursor-pointer">REMOVE</button>
                                                 </div>
                                             </div>
                                         </div>

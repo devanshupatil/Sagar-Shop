@@ -1,7 +1,0 @@
-# Ignore all .env files in any directory
-**/.env
-
-# Optional: Ignore specific environment files
-.env.local
-.env.development
-.env.production

@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
-      '/api': 'https://sagar-shop.onrender.com',
+      '/api': 'http://localhost:4100',
     },
   },
 })

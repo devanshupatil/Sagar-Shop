@@ -16,14 +16,15 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isProduct, setisProduct] = useState(false);
   const { getAccessToken } = useAuth();
-  const userId = JSON.parse(atob(getAccessToken().split('.')[1])).sub;
  
   const fetchWishlistProducts = async () => {
 
-    if (!userId) {
-      console.log("userId not found")
+    if (!getAccessToken()) {
+      navigate('/login');
       return;
     }
+
+    const userId = JSON.parse(atob(getAccessToken().split('.')[1])).sub;
 
     try {
 
@@ -67,15 +68,31 @@ function App() {
   };
 
   useEffect(() => {
+    if (!getAccessToken()) {
+      setisProduct(false)
+      return;
+    }
     fetchWishlistProducts();
   }, []);
 
 
   useEffect(() => {
+    if (!getAccessToken()) {
+      setisProduct(false)
+      return;
+    }
     fetchProducts();
   }, [wishlist]);
 
-  const handleRemoveFromWishlist = (userId, productId) => {
+  const handleRemoveFromWishlist = ( productId) => {
+
+    if (!getAccessToken()) {
+      navigate('/login');
+      return;
+    }
+
+    const userId = JSON.parse(atob(getAccessToken().split('.')[1])).sub;
+
 
     if (!userId || !productId) {
       console.log('Invalid ID');
@@ -173,7 +190,7 @@ function App() {
                       </div>
                       <button className="p-2 rounded-full">
                         <Trash2
-                          onClick={() => handleRemoveFromWishlist(userId, item.product_id)}
+                          onClick={() => handleRemoveFromWishlist(item.product_id)}
                           className="w-5 h-5 text-gray-400 hover:text-gray-500 cursor-pointer" />
                       </button>
                     </div>
