@@ -70,7 +70,9 @@ function Product() {
 
   useEffect(() => {
 
-    if(!userId){
+    console.log(getAccessToken());
+
+    if(!getAccessToken()){
      navigate('/login');
     }
     fetchData();
