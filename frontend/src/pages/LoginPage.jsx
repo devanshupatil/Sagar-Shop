@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { Loader2, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -12,6 +12,17 @@ export function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const checkSession = async () => {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            navigate('/');
+          }
+        };
+    
+        checkSession();
+      }, [navigate]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -122,7 +133,9 @@ export function Login() {
                                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                                 </button>
                             </div>
-                            <button type="button" className="cursor-pointer mt-2 text-sm text-orange-600 hover:text-orange-500">
+                            <button 
+                            onClick={()=>window.location.href='/forgot-password'}
+                            type="button" className="cursor-pointer mt-2 text-sm text-orange-600 hover:text-orange-500">
                                 Forgot your password?
                             </button>
                         </div>

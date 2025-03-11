@@ -17,6 +17,7 @@ import SuccessPage from './pages/SuccessPage';
 import FilterPage from './pages/FilterPage';
 import ProductNotFound from './components/common/ProductNotFound';
 import AdminPage from './pages/AdminPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 
 function App() {
   return (
@@ -39,6 +40,10 @@ function App() {
           <Route
             path="/login"
             element={<LoginPage />}
+          />
+          <Route
+            path="/forgot-password"
+            element={<ForgotPasswordPage />}
           />
           <Route
             path="/signup"

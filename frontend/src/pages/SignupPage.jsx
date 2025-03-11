@@ -1,29 +1,103 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Loader2, Mail, Lock, User, Eye, EyeOff} from 'lucide-react';
+import { Loader2, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { ShoppingBag } from 'lucide-react';
+import { ShoppingBag, Phone } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import supabase from '../config/DataBase';
+
 
 export function Signup() {
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const navigate = useNavigate();
+    const [userId, setUserId] = useState('');
+    const URL = import.meta.env.VITE_BACKEND_URL;
+
+    useEffect(() => {
+        const checkSession = async () => {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            navigate('/');
+          }
+        };
+    
+        checkSession();
+      }, [navigate]);
+
 
     const handleSignup = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        toast.success('Welcome to ShopHub! Your account has been created. (Demo)');
-        setIsLoading(false);
+
+        try {
+
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password,
+            });
+            setUserId(data.user.id);
+            if (error) {
+                toast.error(error.message);
+            }
+
+
+            const response = await fetch(`${URL}/api/user`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    email,
+                    phoneNumber,
+                    userId
+                })
+            });
+
+            const Data = response.json();
+            console.log(Data)
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            toast.success('Successfully signed up!');
+            alert('Please check your email to verify your account.');
+            navigate('/login');
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Failed to sign up');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleGoogleSignup = async () => {
         setIsLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        toast.success('Successfully signed up with Google! (Demo)');
-        setIsLoading(false);
+        try {
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+            });
+
+
+            if (error) {
+                toast.error('google login failed');
+                console.error('google login error:', error);
+            }
+
+            toast.success('Welcome back to SagarShop!');
+
+        } catch (error) {
+            console.error('Error with google login:', error);
+            toast.error('An error occurred. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -49,16 +123,49 @@ export function Signup() {
                     <form onSubmit={handleSignup} className="space-y-6">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Full Name
+                                First Name
                             </label>
                             <div className="relative">
                                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                                 <input
                                     type="text"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
                                     className="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                                     placeholder="John Doe"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Last Name
+                            </label>
+                            <div className="relative">
+                                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                                <input
+                                    type="text"
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    className="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                    placeholder="John Doe"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Phone Number
+                            </label>
+                            <div className="relative">
+                                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                                <input
+                                    type="text"
+                                    value={phoneNumber}
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                    className="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                    placeholder="123-456-7890"
                                     required
                                 />
                             </div>

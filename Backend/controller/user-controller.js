@@ -92,10 +92,31 @@ const getUserById = async (req, res) => {
     }
 }
 
+const createNewUser = async (req, res) => {
+
+    try{
+        const {firstName, lastName, email, phoneNumber, userId} = req.body;
+
+        if(!firstName || !lastName || !email || !phoneNumber || !userId)
+        {
+            throw new Error('Invalid input');
+        }
+        const data = await user.createNewUser(firstName, lastName, email, phoneNumber, userId);
+        res.status(200).json(data);
+    }
+    catch(error)
+    {
+        console.error('Error creating new user:', error);
+        throw new Error('Server Error: Unable to create new user');
+    }
+
+}
+
 module.exports = {
     saveUserShippingDetails,
     getUserShippingDetails,
     updateUserShippingDetails,
     deleteUserShippingDetails,
-    getUserById
+    getUserById,
+    createNewUser
 }

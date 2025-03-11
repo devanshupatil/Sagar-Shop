@@ -6,13 +6,13 @@ const User = {
     saveShippingDetails : async (userId, address, city, state, pincode, country) => {
         try {
             const { data, error } = await supabase
-            .from('user_addresses')
+            .from('user_profiles')
             .insert({
                 user_id: userId,
                 address_line: address,
                 city: city,
                 state: state,
-                postal_code: pincode,
+                pincode: pincode,
                 country: country
             })
             .select();
@@ -29,7 +29,7 @@ const User = {
 
         try {
             const { data, error } = await supabase
-            .from('user_addresses')
+            .from('user_profiles')
             .select('*')
             .eq('user_id', userId)
             .single();
@@ -45,12 +45,12 @@ const User = {
     updateShippingDetails : async (userId, address, city, state, pincode, country) => {
         try {
             const { data, error } = await supabase
-            .from('user_addresses')
+            .from('user_profiles')
             .update({
                 address_line: address,
                 city: city,
                 state: state,
-                postal_code: pincode,
+                pincode: pincode,
                 country: country
             })
             .eq('user_id', userId)
@@ -67,7 +67,7 @@ const User = {
     deleteShippingDetails : async (userId) => {
         try {
             const { data, error } = await supabase
-            .from('user_addresses')
+            .from('user_profiles')
             .delete()
             .eq('user_id', userId)
             .select();
@@ -93,6 +93,27 @@ const User = {
         catch (error) {
             console.error('Error getting user:', error);
             throw new Error('Server Error: Unable to get user');
+        }
+    },
+
+    createNewUser : async (firstName, lastName, email, phoneNumber, userId) => {
+        try {
+            const { data, error } = await supabase
+            .from('user_profiles')
+            .insert({
+                user_id: userId,
+                first_name: firstName,
+                last_name: lastName,
+                user_email: email,
+                phone_number: phoneNumber
+            })
+            .select();
+            if (error) throw error;
+            return data;
+        }
+        catch (error) {
+            console.error('Error creating new user:', error);
+            throw new Error('Server Error: Unable to create new user');
         }
     }
 
