@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BellRing, Star, Truck, CreditCard, Banknote, Info, Loader } from 'lucide-react';
+import { BellRing, Star, Truck, Info, Loader } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import useAuth from '../components/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -116,9 +116,12 @@ function CheckOut() {
 
     useEffect(() => {
         fetchQuantity();
-        fetchUser();
         fetchData();
     }, [productId, quantity])
+
+    useEffect(() => {
+        fetchUser();
+    }, [userId])
 
     const handleLoginChange = () => {
         setIsLoginChanged(false);
