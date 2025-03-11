@@ -28,7 +28,7 @@ function CartPage() {
             console.log("token not found")
             return;
         }
-        
+
         const userId = JSON.parse(atob(token.split('.')[1])).sub;
 
         if (!userId) {

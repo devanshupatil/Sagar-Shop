@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const authMiddleware = async (req, res, next) => {
   try {
-    // const authHeader = req.headers.authorization;
+    const authHeader = req.headers.authorization;
     console.log('token get', authHeader.startsWith('Bearer'));
 
     console.log("token get", authHeader);

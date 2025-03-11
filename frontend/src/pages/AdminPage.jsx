@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-
+import useAuth from '../components/contexts/AuthContext';
 import {
     Package,
     Users,
@@ -28,7 +28,8 @@ import {
 
 
 function AdminPage() {
-
+    
+    const { getAccessToken } = useAuth();
     const [selectedStatus, setSelectedStatus] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     //   const [editingProduct, setEditingProduct] = useState(null);
@@ -106,6 +107,7 @@ function AdminPage() {
                 const response = await fetch(`${URL}/api/user/${order.user_id}`, {
                     headers: {
                         'Content-Type': 'application/json',
+                        Authorization: `Bearer ${getAccessToken()}`,
                     }
                 });
                 const data = await response.json();

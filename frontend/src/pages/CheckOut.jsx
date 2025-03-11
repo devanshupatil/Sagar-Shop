@@ -73,6 +73,7 @@ function CheckOut() {
             const response = await fetch(`${URL}/api/user/${userId}`, {
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getAccessToken()}`,
                 }
             });
             const data = await response.json();
