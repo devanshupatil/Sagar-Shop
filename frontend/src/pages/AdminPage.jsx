@@ -8,6 +8,7 @@ import {
     Search,
     Edit,
     Trash,
+    Loader
 } from 'lucide-react';
 
 // const Product = {
@@ -28,7 +29,7 @@ import {
 
 
 function AdminPage() {
-    
+
     const { getAccessToken } = useAuth();
     const [selectedStatus, setSelectedStatus] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
@@ -141,7 +142,7 @@ function AdminPage() {
     const handleStatusChange = async (orderId, newStatus) => {
 
         try {
-            const response = await fetch(`${URL}/api/order-status/${orderId}/${newStatus}`, {
+            const response = await fetch(`${URL}/api/order-status/${orderId}/${newStatus}/${new Date()}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -224,6 +225,13 @@ function AdminPage() {
                         </select>
                     </div>
                 </div>
+                {isLoading && (
+
+                    <div className="min-h-screen flex items-center justify-center">
+                        <Loader className="h-10 w-10 animate-spin rounded-full border-orange-500"></Loader>
+                    </div>
+
+                )}
 
                 {/* Orders Table */}
                 <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -238,60 +246,64 @@ function AdminPage() {
                                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-200">
-                            {filteredProducts.map((product) => (
-                                <tr key={product.id} className="hover:bg-gray-50">
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center">
-                                            <img src={product.image} alt={product.name} className="h-10 w-10 rounded-md object-cover" />
-                                            <div className="ml-4">
-                                                <div className="text-sm font-medium text-gray-900">{product.orderId}</div>
-                                                <div className="text-sm text-gray-500">{product.name}</div>
+
+
+                        {!isLoading && (
+                            <tbody className="divide-y divide-gray-200">
+                                {filteredProducts.map((product) => (
+                                    <tr key={product.id} className="hover:bg-gray-50">
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center">
+                                                <img src={product.image} alt={product.name} className="h-10 w-10 rounded-md object-cover" />
+                                                <div className="ml-4">
+                                                    <div className="text-sm font-medium text-gray-900">{product.orderId}</div>
+                                                    <div className="text-sm text-gray-500">{product.name}</div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="text-sm text-gray-900">{product.customer}</div>
-                                        <div className="text-sm text-gray-500">{product.address}</div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <select
-                                            className="text-sm rounded-full px-3 py-1 font-medium"
-                                            style={{
-                                                backgroundColor:
-                                                    product.status === 'delivered' ? '#DEF7EC' :
-                                                        product.status === 'shipped' ? '#E5EDFF' :
-                                                            product.status === 'pending' ? '#FEF3C7' :
-                                                                product.status === 'cancelled' ? '#FDE2E2' : '#E5EDFF',
-                                                color:
-                                                    product.status === 'delivered' ? '#03543F' :
-                                                        product.status === 'shipped' ? '#1E3A8A' :
-                                                            product.status === 'pending' ? '#92400E' :
-                                                                product.status === 'cancelled' ? '#9B1C1C' : '#1E3A8A'
-                                            }}
-                                            value={product.status}
-                                            onChange={(e) => handleStatusChange(product.orderId, e.currentTarget.value)}>
-                                            <option value="pending">Pending</option>
-                                            <option value="processing">Processing</option>
-                                            <option value="shipped">Shipped</option>
-                                            <option value="out-for-delivery">Out For Delivery</option>
-                                            <option value="delivered">Delivered</option>
-                                            <option value="cancelled">Cancelled</option>
-                                        </select>
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-500">{product.orderDate}</td>
-                                    <td className="px-6 py-4 text-sm text-gray-900">₹{product.price}</td>
-                                    <td className="px-6 py-4 text-right text-sm font-medium">
-                                        <button className="text-blue-600 hover:text-blue-900 mr-3">
-                                            <Edit size={18} />
-                                        </button>
-                                        <button className="text-red-600 hover:text-red-900">
-                                            <Trash size={18} />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="text-sm text-gray-900">{product.customer}</div>
+                                            <div className="text-sm text-gray-500">{product.address}</div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <select
+                                                className="text-sm rounded-full px-3 py-1 font-medium"
+                                                style={{
+                                                    backgroundColor:
+                                                        product.status === 'delivered' ? '#DEF7EC' :
+                                                            product.status === 'shipped' ? '#E5EDFF' :
+                                                                product.status === 'pending' ? '#FEF3C7' :
+                                                                    product.status === 'cancelled' ? '#FDE2E2' : '#E5EDFF',
+                                                    color:
+                                                        product.status === 'delivered' ? '#03543F' :
+                                                            product.status === 'shipped' ? '#1E3A8A' :
+                                                                product.status === 'pending' ? '#92400E' :
+                                                                    product.status === 'cancelled' ? '#9B1C1C' : '#1E3A8A'
+                                                }}
+                                                value={product.status}
+                                                onChange={(e) => handleStatusChange(product.orderId, e.currentTarget.value)}>
+                                                <option value="pending">Pending</option>
+                                                <option value="processing">Processing</option>
+                                                <option value="shipped">Shipped</option>
+                                                <option value="out-for-delivery">Out For Delivery</option>
+                                                <option value="delivered">Delivered</option>
+                                                <option value="cancelled">Cancelled</option>
+                                            </select>
+                                        </td>
+                                        <td className="px-6 py-4 text-sm text-gray-500">{product.orderDate}</td>
+                                        <td className="px-6 py-4 text-sm text-gray-900">₹{product.price}</td>
+                                        <td className="px-6 py-4 text-right text-sm font-medium">
+                                            <button className="text-blue-600 hover:text-blue-900 mr-3">
+                                                <Edit size={18} />
+                                            </button>
+                                            <button className="text-red-600 hover:text-red-900">
+                                                <Trash size={18} />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        )}
                     </table>
                 </div>
 
