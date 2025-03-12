@@ -26,7 +26,7 @@ router.post('/orders/:userId/:productId/:stockQuantity', createOrder);
 
 router.get('/orders', getAllOrders);
 
-router.put('/order-status/:orderId/:newStatus', updateOrderStatus);
+router.put('/order-status/:orderId/:newStatus/:updateTime', updateOrderStatus);
 
 router.delete('/remove-product-from-carts/:userId/:productId', removeProductById);
 

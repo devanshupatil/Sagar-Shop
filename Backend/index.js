@@ -27,7 +27,7 @@ dotenv.config();
 
 app.use(cors({
   origin: [
-    'http://localhost:4000',  // Local development
+    'http://localhost:4100',  // Local development
     'http://localhost:5173',
     'https://sagar-shop.onrender.com', 
     'https://sagarshop.vercel.app' // Local development

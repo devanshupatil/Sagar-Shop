@@ -181,18 +181,20 @@ const getAllOrders = async (req, res) => {
 }
 
 const updateOrderStatus = async (req, res) => {
-
     try {
-        const { orderId, newStatus } = req.params;
-        if (!orderId || !newStatus) {
-            throw new Error('Invalid ID');
+        const { orderId, newStatus, updateTime } = req.params;
+        if (!orderId || !newStatus || !updateTime) {
+            return res.status(400).json({ error: 'Invalid ID or parameters' });
         }
-        const data = await CartOrderModel.updateOderStatus(orderId, newStatus);
+
+        // Convert updateTime to a recognized format if necessary
+        const formattedUpdateTime = new Date(updateTime).toISOString(); // Ensure it's in ISO format
+
+        const data = await CartOrderModel.updateOderStatus(orderId, newStatus, formattedUpdateTime);
         res.status(200).json(data);
-    }
-    catch (error) {
+    } catch (error) {
         console.error('Error updating order status:', error);
-        throw new Error('Server Error: Unable to update order status');
+        res.status(500).json({ error: 'Server Error: Unable to update order status' });
     }
 }
 

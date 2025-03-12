@@ -1,210 +1,262 @@
-import { Package, CheckCircle2, Shield, ShieldCheck } from 'lucide-react';
+import { Package2, CheckCircle2, MapPin, Clock, Info, Loader } from 'lucide-react';
 import useAuth from '../components/contexts/AuthContext';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+
 
 function OrderDetailsPage() {
 
+  const { productId, orderId } = useParams();
   const URL = import.meta.env.VITE_BACKEND_URL;
   const { getAccessToken } = useAuth();
-  const [orders, setOrders] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [order, setOrder] = useState('');
+  const [product, setProduct] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const userId = JSON.parse(atob(getAccessToken().split('.')[1])).sub;
+  const [orderStatus, setOrderStatus] = useState('');
+  const [discount, setDiscount] = useState(0);
+  const [user, setUser] = useState('');
+  // const navigate = useNavigate();
+
+  console.log(user)
 
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
 
   useEffect(() => {
     fetchProducts();
-  }, [orders]);
+  }, []);
 
-  const fetchOrders = async () => {
+  useEffect(() => {
+    fetchOrders();
+  }, [])
 
-    if(!getAccessToken())
-    {
-      navigate('/login');
-    }
+  useEffect(() => {
+    fetchUser()
+  }, [])
 
-    const userId = JSON.parse(atob(getAccessToken().split('.')[1])).sub;
+  const fetchUser = async () => {
+
+    setIsLoading(true);
 
     try {
-      const response = await fetch(`${URL}/api/orders/${userId}`, {
+      const response = await fetch(`${URL}/api/user/${userId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getAccessToken()}`
+        }
+      });
+      const data = await response.json();
+      setUser(data);
+
+    } catch (error) {
+      console.log(error)
+    }
+    finally {
+      setIsLoading(false);
+    }
+  }
+
+
+  const fetchProducts = async () => {
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(`${URL}/api/products/${productId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-        }
+        },
       });
-
       const data = await response.json();
-      setOrders(data);
+      setProduct(data)
     }
     catch (error) {
-      console.error("Error fetching carts:", error); // Use console.error for errors
+      console.error('Error fetching products:', error);
+      toast.error('Failed to fetch data');
     }
+    finally {
+      setIsLoading(false);
+    }
+  }
 
-  };
 
-  const fetchProducts = async () => {
-
-    setIsLoading(true);
+  const fetchOrders = async () => {
     try {
-
-      const promises = orders.map(async (order) => {
-        const response = await fetch(`${URL}/api/products/${order.product_id}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        });
-        const data = await response.json();
-        return data;
+      const response = await fetch(`${URL}/api/order/${userId}/${orderId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
-
-      setProducts(await Promise.all(promises));
-      setIsLoading(false);
+      const data = await response.json();
+      setOrder(data);
+      setOrderStatus(data.order_status); // Fix: Set the orderStatus state with data.order_status
+      setDiscount((product.mrp - product.price) * data.quantity);
     }
     catch (error) {
-      console.error("Error fetching products:", error); // Use console.error for errors
-      setIsLoading(false);
+      console.error('Error fetching orders:', error);
+      toast.error('Failed to fetch order data');
     }
-  };
+  }
 
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow-sm p-6 grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Product Details */}
-          <div className="md:col-span-2">
-            <div className="flex gap-4 items-start">
-              <img
-                src="https://images.unsplash.com/photo-1585659722983-3a675dabf23d?auto=format&fit=crop&q=80&w=200&h=200"
-                alt="Sandwich Maker"
-                className="w-24 h-24 object-cover rounded-lg"
-              />
-              <div>
-                <h2 className="text-lg font-medium">iBELL SM1515 Sandwich Maker with Floating Hinges, 1000 Watt</h2>
-                <p className="text-gray-500 text-sm">Black, Silver</p>
-                <p className="text-gray-500 text-sm mt-1">Seller: iBellHomeAppliances</p>
-                <p className="text-xl font-semibold mt-2">₹1,412</p>
-              </div>
-            </div>
+    <div className="min-h-screen bg-gray-50">
 
-            {/* Delivery Status */}
-            <div className="mt-8">
-              <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
-                <Package size={18} />
-                <span>Open Box Delivery will be done</span>
-                <button className="text-blue-600 ml-auto">View Checks</button>
-              </div>
-
-              {/* Timeline */}
-              <div className="relative">
-                <div className="absolute left-2 top-0 h-full w-0.5 bg-gray-200"></div>
-
-                <div className="relative pl-10 pb-8">
-                  <div className="absolute left-0 -ml-1">
-                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                      <CheckCircle2 size={16} className="text-white" />
-                    </div>
-                  </div>
-                  <p className="font-medium">Order Confirmed</p>
-                  <p className="text-sm text-gray-500">Tue Mar 11</p>
-                </div>
-
-                <div className="relative pl-10 pb-8">
-                  <div className="absolute left-0 -ml-1">
-                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                      <CheckCircle2 size={16} className="text-white" />
-                    </div>
-                  </div>
-                  <p className="font-medium">Shipped</p>
-                  <p className="text-sm text-gray-500">Your item has left a Flipkart Facility, Thane, Wed 12th Mar</p>
-                </div>
-
-                <div className="relative pl-10 pb-8">
-                  <div className="absolute left-0 -ml-1">
-                    <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
-                  </div>
-                  <p className="font-medium text-gray-500">Out For Delivery</p>
-                </div>
-
-                <div className="relative pl-10">
-                  <div className="absolute left-0 -ml-1">
-                    <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
-                  </div>
-                  <p className="font-medium text-gray-500">Delivery</p>
-                  <p className="text-sm text-gray-500">Mar 16 By 11 PM</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Price Details */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="font-medium mb-4">Price Details</h3>
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-600">List price</span>
-                <span>₹4,650</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Selling price</span>
-                <span>₹1,620</span>
-              </div>
-              <div className="flex justify-between text-green-600">
-                <span>Extra Discount</span>
-                <span>-₹227</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Special Price</span>
-                <span>₹1,393</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Delivery Charge</span>
-                <span className="text-green-600">Free</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Handling Fee</span>
-                <span>₹10</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Protect Promise Fee</span>
-                <span>₹9</span>
-              </div>
-              <div className="pt-3 border-t flex justify-between font-medium">
-                <span>Total Amount</span>
-                <span>₹1,412</span>
-              </div>
-              <div className="pt-3 flex items-center gap-2 text-green-600">
-                <Shield size={16} />
-                <span>Cash On Delivery: ₹1412.0</span>
-              </div>
-            </div>
+      {isLoading && (
+        <div>
+          <div className="flex items-center justify-center">
+            <Loader className="h-10 w-10 animate-spin rounded-full border-orange-500 mt-50"></Loader>
           </div>
         </div>
+      )}
 
-        {/* Customer Details */}
-        <div className="mt-6 bg-white rounded-lg shadow-sm p-6">
-          <div className="flex items-start gap-4">
-            <ShieldCheck className="text-green-600" size={24} />
-            <div>
-              <h3 className="font-medium">Devanshu Patil</h3>
-              <p className="text-gray-600 mt-1">
-                Adarsh nagar, sayli general, near government hospital, motala<br />
-                Near Cotton market, motala, Buldhana, Buldana District<br />
-                Maharashtra - 443103
-              </p>
-              <p className="text-gray-600 mt-2">
-                Phone number: 7397927021, 7410744850
-              </p>
+      {!isLoading && (
+
+        <main className="container mx-auto px-4 py-8">
+
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            {/* Product and Status Section */}
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+                {/* Product Info */}
+                <div className="flex items-start gap-6 mb-6" key={product.product_id}>
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-24 h-24 object-contain"
+                  />
+                  <div>
+                    <h1 className="text-lg font-medium">{product.heading}</h1>
+                    <p className="text-gray-500">{product.description}</p>
+                    {/* <p className="text-gray-500 text-sm mt-1">Seller: {product.seller}</p> */}
+                    <p className="text-xl font-medium mt-2">₹{product.price}</p>
+                  </div>
+                </div>
+
+                {/* Timeline */}
+                {
+                  orderStatus != 'cancelled' && (
+                    <div className="space-y-8 relative">
+                      <div className="absolute left-4 top-4 bottom-0 w-0.5 bg-gray-200"></div>
+
+                      <div className="flex items-start relative">
+
+
+
+                        <div className="flex-shrink-0 z-10">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${orderStatus === 'pending' ? 'bg-red-500' : 'bg-gray-200'} ${orderStatus === 'processing' || orderStatus === 'shipped' || orderStatus === 'out-for-delivery' || orderStatus === 'delivered' ? 'bg-green-500' : 'bg-gray-200'}`}>
+                            <CheckCircle2 className={`w-5 h-5 ${orderStatus === 'pending' ? 'text-white' : 'text-gray-400'} ${orderStatus === 'processing' ? 'text-white' : 'text-gray-400'}`} />
+                          </div>
+                        </div>
+
+                        <div className="ml-6">
+                          <h3 className="text-lg font-medium text-gray-900">{orderStatus == 'pending' ? 'Pending' : 'Order Confirmed'}</h3>
+                          {/* <p className="text-sm text-gray-500">Tue Mar 11</p> */}
+                        </div>
+
+                      </div>
+
+                      <div className="flex items-start relative">
+                        <div className="flex-shrink-0 z-10">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${orderStatus === 'shipped' || orderStatus === 'out-for-delivery' || orderStatus === 'delivered' ? 'bg-green-500' : 'bg-gray-200'}`}>
+                            <Package2 className={`w-5 h-5 ${orderStatus === 'shipped' ? 'text-white' : 'text-gray-400'}`} />
+                          </div>
+                        </div>
+                        <div className="ml-6">
+                          <h3 className={`text-lg font-medium ${orderStatus === 'shipped' ? 'text-green-900' : 'text-gray-900'}`}>Shipped</h3>
+                          <p className="text-sm text-gray-500">Your item has left a Flipkart Facility, Thane, Wed 12th Mar</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start relative">
+                        <div className="flex-shrink-0 z-10">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${orderStatus === 'out-for-delivery' || orderStatus == 'delivered' ? 'bg-green-500' : 'bg-gray-200'}`}>
+                            <MapPin className={`w-5 h-5 ${orderStatus === 'out-for-delivery' ? 'text-white' : 'text-gray-400'}`} />
+                          </div>
+                        </div>
+                        <div className="ml-6">
+                          <h3 className={`text-lg font-medium ${orderStatus === 'out-for-delivery' ? 'text-green-900' : 'text-gray-900'}`}>Out For Delivery</h3>
+                          <p className="text-sm text-gray-500">Estimated delivery by Mar 16</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start relative">
+                        <div className="flex-shrink-0 z-10">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${orderStatus == 'delivered' ? 'bg-green-500' : 'bg-gray-200'}`}>
+                            <Clock className={`w-5 h-5 ${orderStatus === 'delivered' ? 'text-white' : 'text-gray-400'}`} />
+                          </div>
+                        </div>
+                        <div className="ml-6">
+                          <h3 className={`text-lg font-medium ${orderStatus === 'delivered' ? 'text-green-900' : 'text-gray-900'}`}>Delivery</h3>
+                          <p className="text-sm text-gray-500">Mar 16 By 11 PM</p>
+                        </div>
+                      </div>
+
+
+                    </div>
+                  )
+                }
+                {orderStatus === 'cancelled' && (
+
+                  <div className="flex items-start relative">
+                    <div className="flex-shrink-0 z-10">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${orderStatus == 'cancelled' ? 'bg-red-500' : 'bg-gray-200'}`}>
+                        <Clock className={`w-5 h-5 ${orderStatus === 'cancelled' ? 'text-white' : 'text-gray-400'}`} />
+                      </div>
+                    </div>
+                    <div className="ml-6">
+                      <h3 className={`text-lg font-medium ${orderStatus === 'cancelled' ? 'text-red-900' : 'text-gray-900'}`}>Cancelled</h3>
+                      <p className="text-sm text-gray-500">Mar 16 By 11 PM</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Order Details Sidebar */}
+            <div className="lg:col-span-1">
+
+
+              {/* Shipping Details */}
+              <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+                <h2 className="text-lg font-medium mb-4">Shipping Details</h2>
+                <div className="space-y-2">
+                  <p className="font-medium">{user.first_name} {user.last_name}</p>
+                  <p className="text-gray-600">{user.address}, {user.city}</p>
+                  <p className="text-gray-600">{user.state} - {user.pincode}</p>
+                  <p className="text-gray-600">Phone number: {user.phone_number}</p>
+                </div>
+              </div>
+
+              {/* Price Details */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-lg font-medium mb-4">Price Details</h2>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Original price</span>
+                    <span className="line-through">₹{product.mrp ? product.mrp.toLocaleString('en-IN') : 'N/A'}</span>
+                  </div>
+                  <div className="flex justify-between text-green-600">
+                    <span>Discount</span>
+                    <span>- ₹{discount ? discount.toLocaleString('en-IN') : '0'}</span>
+                  </div>
+                  <div className="pt-3 border-t flex justify-between font-medium">
+                    <span>Total Amount</span>
+                    <span>₹{product.price ? product.price.toLocaleString('en-IN') : '0'}</span>
+                  </div>
+                </div>
+
+
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </main>
+      )}
     </div>
   );
 }

@@ -182,7 +182,7 @@ const CartOrder = {
             .select('*')
             .eq('user_id', userId)
             .eq('order_id', orderId)
-            .select();
+            .single();
             if(error) throw error;
             return data;
         }
@@ -209,17 +209,15 @@ const CartOrder = {
         }
     },
 
-    updateOderStatus: async (orderId, newStatus) => {
-
-        if(!orderId || !newStatus)
-        {
-            throw new Error('Invalid ID');
-        }
+    updateOderStatus: async (orderId, newStatus, updateTime) => {
 
         try{
             const { data, error } = await supabase
             .from('orders')
-            .update({ order_status: newStatus })
+            .update({ 
+                order_status: newStatus,
+                updated_at: updateTime
+             })
             .eq('order_id', orderId);
             if(error) throw error;
             return data;

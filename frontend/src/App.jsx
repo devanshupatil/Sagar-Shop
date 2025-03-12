@@ -136,7 +136,7 @@ function App() {
             </div>}
           />
           <Route
-            path="/order-details"
+            path="/order-details/:productId/:orderId"
             element={<div className="w-full h-full flex flex-col">
               <Header />
               <Navbar />

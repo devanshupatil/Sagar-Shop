@@ -1,6 +1,8 @@
 import { Search, ChevronRight, Loader } from 'lucide-react';
 import useAuth from '../components/contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 
 function OrdersPage() {
@@ -12,16 +14,18 @@ function OrdersPage() {
     const [products, setProducts] = useState([]);
     const searchInputRef = useRef(null);
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
+
 
     const handleSearch = () => {
         const searchQuery = searchInputRef.current.value.toLowerCase();
-        const filteredProducts = products.filter(product => 
+        const filteredProducts = products.filter(product =>
 
-            product.products?.some(p => 
-                p.product_name.toLowerCase().includes(searchQuery) || 
-                p.description.toLowerCase().includes(searchQuery) || 
-                p.heading.toLowerCase().includes(searchQuery) || 
-                p.product_type.toLowerCase().includes(searchQuery) || 
+            product.products?.some(p =>
+                p.product_name.toLowerCase().includes(searchQuery) ||
+                p.description.toLowerCase().includes(searchQuery) ||
+                p.heading.toLowerCase().includes(searchQuery) ||
+                p.product_type.toLowerCase().includes(searchQuery) ||
                 p.price.toLowerCase().includes(searchQuery)
             )
         );
@@ -72,6 +76,12 @@ function OrdersPage() {
             setIsLoading(false);
         }
     };
+
+    const handleOrderDetails = async (productId, orderId) => {
+
+        window.location.href = `/order-details/${productId}/${orderId}`
+
+    }
 
     useEffect(() => {
         fetchOrders();
@@ -162,33 +172,38 @@ function OrdersPage() {
 
                                 {products.map((product) => (
 
+
                                     <div className="space-y-4" key={product.product_id}>
 
-                                        <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">
+                                        {orders.map((order) => (
 
-                                            <div className="p-4 cursor-pointer">
-                                                <div className="flex items-start gap-4">
-                                                    <img
-                                                        src={product.image}
-                                                        alt={product.heading}
-                                                        className="w-24 h-24 object-cover rounded"
-                                                    />
-                                                    <div className="flex-1">
-                                                        <div className="flex justify-between items-start">
-                                                            <div>
-                                                                <h3 className="font-medium">{product.heading}</h3>
-                                                                <p className='text-gray-500 text-sm mt-1'>{product.description}</p>
-                                                                <p className="text-gray-500 text-sm mt-1">₹{product.price}</p>
-                                                            </div>
-                                                            <div className="text-right">
-                                                                <p className="text-sm text-gray-600 mt-1">Your item has been shipped.</p>
+                                            <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300" key={order.order_id} onClick={() => handleOrderDetails(product.product_id, order.order_id)}>
+
+                                                <div className="p-4 cursor-pointer">
+                                                    <div className="flex items-start gap-4">
+                                                        <img
+                                                            src={product.image}
+                                                            alt={product.heading}
+                                                            className="w-24 h-24 object-cover rounded"
+                                                        />
+                                                        <div className="flex-1">
+                                                            <div className="flex justify-between items-start">
+                                                                <div>
+                                                                    <h3 className="font-medium">{product.heading}</h3>
+                                                                    <p className='text-gray-500 text-sm mt-1'>{product.description}</p>
+                                                                    <p className="text-gray-500 text-sm mt-1">₹{product.price}</p>
+                                                                </div>
+                                                                <div className="text-right">
+                                                                    <p className="text-sm text-gray-600 mt-1">Your item has been shipped.</p>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        ))}
                                     </div>
+
 
 
 
