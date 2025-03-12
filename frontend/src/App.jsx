@@ -18,6 +18,7 @@ import FilterPage from './pages/FilterPage';
 import ProductNotFound from './components/common/ProductNotFound';
 import AdminPage from './pages/AdminPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import OrderDetailsPage from '../src/pages/OrderDetailsPage'
 
 function App() {
   return (
@@ -132,6 +133,15 @@ function App() {
             path="/admin"
             element={<div className="w-full h-full flex flex-col">
               <AdminPage />
+            </div>}
+          />
+          <Route
+            path="/order-details"
+            element={<div className="w-full h-full flex flex-col">
+              <Header />
+              <Navbar />
+              <OrderDetailsPage />
+              <Footer />
             </div>}
           />
 
