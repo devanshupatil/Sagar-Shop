@@ -20,7 +20,9 @@ function OrderDetailsPage() {
   const [user, setUser] = useState('');
   // const navigate = useNavigate();
 
-  console.log(user)
+  useEffect(() => {
+    setDiscount((product.mrp - product.price) * order.quantity);
+  }, [order])
 
 
 
@@ -93,14 +95,12 @@ function OrderDetailsPage() {
       const data = await response.json();
       setOrder(data);
       setOrderStatus(data.order_status); // Fix: Set the orderStatus state with data.order_status
-      setDiscount((product.mrp - product.price) * data.quantity);
     }
     catch (error) {
       console.error('Error fetching orders:', error);
       toast.error('Failed to fetch order data');
     }
   }
-
 
   return (
     <div className="min-h-screen bg-gray-50">
