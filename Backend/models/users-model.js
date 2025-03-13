@@ -47,7 +47,7 @@ const User = {
             const { data, error } = await supabase
             .from('user_profiles')
             .update({
-                address_line: address,
+                address: address,
                 city: city,
                 state: state,
                 pincode: pincode,
@@ -114,6 +114,27 @@ const User = {
         catch (error) {
             console.error('Error creating new user:', error);
             throw new Error('Server Error: Unable to create new user');
+        }
+    },
+
+    updateUserProfile : async (userId, firstName, lastName, email, phoneNumber) => {
+        try {
+            const { data, error } = await supabase
+            .from('user_profiles')
+            .update({
+                first_name: firstName,
+                last_name: lastName,
+                user_email: email,
+                phone_number: phoneNumber
+            })
+            .eq('user_id', userId)
+            .select();
+            if (error) throw error;
+            return data;
+        }
+        catch (error) {
+            console.error('Error updating user profile:', error);
+            throw new Error('Server Error: Unable to update user profile');
         }
     }
 

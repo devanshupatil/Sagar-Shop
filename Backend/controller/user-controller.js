@@ -112,11 +112,30 @@ const createNewUser = async (req, res) => {
 
 }
 
+const updateUserProfile = async (req, res) => {
+
+    try{
+        const {userId, firstName, lastName, email, phoneNumber} = req.body;
+        if(!userId || !firstName || !lastName || !email || !phoneNumber)
+        {
+            throw new Error('Invalid ID');
+        }
+        const data = await user.updateUserProfile(userId, firstName, lastName, email, phoneNumber);
+        res.status(200).json(data);
+    }
+    catch(error)
+    {
+        console.error('Error updating user profile:', error);
+        throw new Error('Server Error: Unable to update user profile');
+    }
+}
+
 module.exports = {
     saveUserShippingDetails,
     getUserShippingDetails,
     updateUserShippingDetails,
     deleteUserShippingDetails,
     getUserById,
-    createNewUser
+    createNewUser,
+    updateUserProfile
 }

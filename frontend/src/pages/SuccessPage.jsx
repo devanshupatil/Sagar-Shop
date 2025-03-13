@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CheckCircle2, ArrowRight, Download, Share2 } from 'lucide-react';
+import { CheckCircle2} from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import useAuth from '../components/contexts/AuthContext';
 
@@ -11,6 +11,30 @@ function App() {
     const { getAccessToken } = useAuth();
     const userId = JSON.parse(atob(getAccessToken().split('.')[1])).sub;
     const [transactionId, setTransactionId] = useState('');
+    const [user, setUser] = useState('');
+
+    const fetchUser = async () => {
+
+        try {
+            const response = await fetch(`${URL}/api/user/${userId}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getAccessToken()}`
+                }
+            });
+            const data = await response.json();
+            setUser(data);
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+    useEffect(() => {
+        fetchUser();
+    }, []);
 
     const fetchProductData = async () => {
 
@@ -95,29 +119,15 @@ function App() {
                         <div className="space-y-4">
                             <h2 className="font-semibold text-gray-900">Delivery Details</h2>
                             <div className="bg-gray-50 p-4 rounded-lg">
-                                <p className="font-medium text-gray-900">Devanshu Patil</p>
+                                <p className="font-medium text-gray-900">{user.first_name} {user.last_name}</p>
                                 <p className="text-gray-600 mt-1">
-                                    Near Government hospital, Buldana District, Maharashtra - 443103
+                                    {user.address}, {user.city}, {user.state} - {user.pincode}
                                 </p>
-                                <p className="text-gray-600 mt-1">Phone: +917397927021</p>
-                                {/* <div className="mt-3 flex items-center text-[#2874f0]">
-                                    <p className="font-medium">Expected Delivery: Mon Feb 24</p>
-                                    <ArrowRight className="w-4 h-4 ml-1" />
-                                </div> */}
+                                <p className="text-gray-600 mt-1">Phone: {user.phone_number}</p>
+
                             </div>
                         </div>
 
-                        {/* Action Buttons */}
-                        {/* <div className="grid grid-cols-2 gap-4 pt-4">
-                            <button className="cursor-pointer flex items-center justify-center gap-2 bg-orange-500 text-white py-3 px-4 rounded-lg hover:bg-orange-600 transition-colors">
-                                <Download className="w-5 h-5" />
-                                Download Invoice
-                            </button>
-                            <button className="cursor-pointer flex items-center justify-center gap-2 border border-orange-500 text-orange-500 py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors">
-                                <Share2 className="w-5 h-5" />
-                                Share Order
-                            </button>
-                        </div> */}
                     </div>
                 </div>
 
