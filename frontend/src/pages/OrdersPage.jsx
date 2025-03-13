@@ -1,9 +1,6 @@
-import { Search, ChevronRight, Loader } from 'lucide-react';
+import { Search, ChevronRight, Loader,CheckCircle } from 'lucide-react';
 import useAuth from '../components/contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-
 
 function OrdersPage() {
 
@@ -14,8 +11,6 @@ function OrdersPage() {
     const [products, setProducts] = useState([]);
     const searchInputRef = useRef(null);
     const [isLoading, setIsLoading] = useState(false);
-    const navigate = useNavigate();
-
 
     const handleSearch = () => {
         const searchQuery = searchInputRef.current.value.toLowerCase();
@@ -45,6 +40,11 @@ function OrdersPage() {
 
             const data = await response.json();
             setOrders(data);
+
+            if(!data)
+            {
+                window.location.href = '/product-not-found';
+            }
         }
         catch (error) {
             console.error("Error fetching carts:", error); // Use console.error for errors
@@ -68,11 +68,19 @@ function OrdersPage() {
                 return data;
             });
 
-            setProducts(await Promise.all(promises));
-            setIsLoading(false);
+            const data = await Promise.all(promises);
+            setProducts(data.map((product, index) => ({
+                ...product,
+                order_id: orders[index].order_id,
+                order_status: orders[index].order_status
+            })));
+           
         }
         catch (error) {
             console.error("Error fetching products:", error); // Use console.error for errors
+            setIsLoading(false);
+        }
+        finally{
             setIsLoading(false);
         }
     };
@@ -105,39 +113,6 @@ function OrdersPage() {
 
             <div className="max-w-7xl mx-auto px-4">
                 <div className="flex flex-col md:flex-row gap-6">
-
-                    {/* Filters Sidebar */}
-                    <div className="md:w-64 flex-shrink-0">
-                        <div className="bg-white p-4 rounded-lg shadow-sm">
-                            <h2 className="font-medium text-lg mb-4">Filters</h2>
-
-                            {/* Order Status */}
-                            <div className="mb-6">
-                                <h3 className="font-medium mb-2">ORDER STATUS</h3>
-                                <div className="space-y-2">
-                                    {['On the way', 'Delivered', 'Cancelled', 'Returned'].map((status) => (
-                                        <label key={status} className="flex items-center gap-2">
-                                            <input type="checkbox" className="rounded border-gray-300" />
-                                            <span className="text-gray-700">{status}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Order Time */}
-                            <div>
-                                <h3 className="font-medium mb-2">ORDER TIME</h3>
-                                <div className="space-y-2">
-                                    {['Last 30 days', '2024', '2023', '2022', '2021', 'Older'].map((time) => (
-                                        <label key={time} className="flex items-center gap-2">
-                                            <input type="checkbox" className="rounded border-gray-300" />
-                                            <span className="text-gray-700">{time}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     {/* Main Content */}
                     <div className="flex-1">
@@ -173,11 +148,10 @@ function OrdersPage() {
                                 {products.map((product) => (
 
 
-                                    <div className="space-y-4" key={product.product_id}>
+                                    <div className="space-y-4" key={product.product_id}  onClick={() => handleOrderDetails(product.product_id, product.order_id)}>
 
-                                        {orders.map((order) => (
-
-                                            <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300" key={order.order_id} onClick={() => handleOrderDetails(product.product_id, order.order_id)}>
+                                      
+                                            <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">
 
                                                 <div className="p-4 cursor-pointer">
                                                     <div className="flex items-start gap-4">
@@ -193,15 +167,19 @@ function OrdersPage() {
                                                                     <p className='text-gray-500 text-sm mt-1'>{product.description}</p>
                                                                     <p className="text-gray-500 text-sm mt-1">₹{product.price}</p>
                                                                 </div>
-                                                                <div className="text-right">
-                                                                    <p className="text-sm text-gray-600 mt-1">Your item has been shipped.</p>
+                                                                <div className="text-right text-gray-500 text-sm mt-3 space-y-6">
+                                                                    <div className="flex items-center space-x-2">
+                                                                        <p className="text-xl mt-3 font-medium text-gray-600">{product.product_id == product.order_id ? product.order_status : 'Pending'}</p>
+                                                                        {product.product_id == product.order_id && product.order_status == 'delivered' && <CheckCircle className="text-green-500 mt-3 " size={20} />}
+                                                                    </div>
                                                                 </div>
+
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        ))}
+                                        
                                     </div>
 
 
