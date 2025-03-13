@@ -1,6 +1,9 @@
-import { Search, ChevronRight, Loader,CheckCircle } from 'lucide-react';
+import { Search, ChevronRight, Loader, CheckCircle, ShieldAlert } from 'lucide-react';
 import useAuth from '../components/contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
+import order_confirmed from '../assets/images/Order-Confirmed.png'
+import shipped from '../assets/images/shipped.png'
+import OutForDelivery from '../assets/images/Out-For-Delivery.png'
 
 function OrdersPage() {
 
@@ -41,8 +44,7 @@ function OrdersPage() {
             const data = await response.json();
             setOrders(data);
 
-            if(!data)
-            {
+            if (!data) {
                 window.location.href = '/product-not-found';
             }
         }
@@ -74,13 +76,13 @@ function OrdersPage() {
                 order_id: orders[index].order_id,
                 order_status: orders[index].order_status
             })));
-           
+
         }
         catch (error) {
             console.error("Error fetching products:", error); // Use console.error for errors
             setIsLoading(false);
         }
-        finally{
+        finally {
             setIsLoading(false);
         }
     };
@@ -148,38 +150,62 @@ function OrdersPage() {
                                 {products.map((product) => (
 
 
-                                    <div className="space-y-4" key={product.product_id}  onClick={() => handleOrderDetails(product.product_id, product.order_id)}>
+                                    <div className="space-y-4" key={product.product_id} onClick={() => handleOrderDetails(product.product_id, product.order_id)}>
 
-                                      
-                                            <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">
 
-                                                <div className="p-4 cursor-pointer">
-                                                    <div className="flex items-start gap-4">
-                                                        <img
-                                                            src={product.image}
-                                                            alt={product.heading}
-                                                            className="w-24 h-24 object-cover rounded"
-                                                        />
-                                                        <div className="flex-1">
-                                                            <div className="flex justify-between items-start">
-                                                                <div>
-                                                                    <h3 className="font-medium">{product.heading}</h3>
-                                                                    <p className='text-gray-500 text-sm mt-1'>{product.description}</p>
-                                                                    <p className="text-gray-500 text-sm mt-1">₹{product.price}</p>
-                                                                </div>
-                                                                <div className="text-right text-gray-500 text-sm mt-3 space-y-6">
-                                                                    <div className="flex items-center space-x-2">
-                                                                        <p className="text-xl mt-3 font-medium text-gray-600">{product.product_id == product.order_id ? product.order_status : 'Pending'}</p>
-                                                                        {product.product_id == product.order_id && product.order_status == 'delivered' && <CheckCircle className="text-green-500 mt-3 " size={20} />}
-                                                                    </div>
-                                                                </div>
+                                        <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">
 
+                                            <div className="p-4 cursor-pointer">
+                                                <div className="flex items-start gap-4">
+                                                    <img
+                                                        src={product.image}
+                                                        alt={product.heading}
+                                                        className="w-24 h-24 object-cover rounded"
+                                                    />
+                                                    <div className="flex-1">
+                                                        <div className="flex justify-between items-start">
+                                                            <div>
+                                                                <h3 className="font-medium">{product.heading}</h3>
+                                                                <p className='text-gray-500 text-sm mt-1'>{product.description}</p>
+                                                                <p className="text-gray-500 text-sm mt-1">₹{product.price}</p>
                                                             </div>
+                                                            <div className="text-right text-gray-500 text-sm mt-3 space-y-6">
+                                                                <div className={`flex items-center space-x-2 
+                                                                    ${product.order_status === 'delivered' ? 'bg-green-100' : 
+                                                                    product.order_status === 'pending' ? 'bg-red-100' : 
+                                                                    product.order_status === 'processing' ? 'bg-green-100' : 
+                                                                    product.order_status === 'shipped' ? 'bg-yellow-100' : 
+                                                                    product.order_status === 'out-for-delivery' ? 'bg-blue-100' : 
+                                                                    'bg-gray-100'} 
+                                                                    rounded p-2 shadow-sm`}>
+                                                                    <p className={`text-xl font-medium  
+                                                                      ${product.order_status === 'pending' ? 'text-red-600' : 
+                                                                      product.order_status === 'delivered' ? 'text-green-600' : 
+                                                                      product.order_status === 'processing' ? 'text-green-600' : 
+                                                                      product.order_status === 'shipped' ? 'text-yellow-600' : 
+                                                                      product.order_status === 'out-for-delivery' ? 'text-blue-600' : ''}`}>
+
+                                                                        {product.order_status === 'processing' ? 'Order Confirmed' : 
+                                                                        product.order_status === 'out-for-delivery' ? 'Out for Delivery' : 
+                                                                        product.order_status === 'shipped' ? 'Shipped' : 
+                                                                        product.order_status === 'delivered' ? 'Delivered' : 
+                                                                        product.order_status === 'pending' ? 'Pending' : 
+                                                                        product.order_status}
+                                                                    </p>
+                                                                    {product.order_status === 'delivered' && <CheckCircle className="text-green-600" size={20} />}
+                                                                    {product.order_status === 'pending' && <ShieldAlert className="text-red-600" size={20} />}
+                                                                    {product.order_status === 'processing' && <img src={order_confirmed} className="w-10 h-10" />}
+                                                                    {product.order_status === 'shipped' && <img src={shipped} className="w-10 h-10" />}
+                                                                    {product.order_status === 'out-for-delivery' && <img src={OutForDelivery} className="w-10 h-10" />}
+                                                                </div>
+                                                            </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        
+                                        </div>
+
                                     </div>
 
 
