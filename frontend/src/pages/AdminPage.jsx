@@ -282,7 +282,7 @@ function AdminPage() {
                                                 }}
                                                 value={product.status}
                                                 onChange={(e) => handleStatusChange(product.orderId, e.currentTarget.value)}>
-                                                <option value="pending" disabled={product.status === 'shipped' || product.status === 'delivered' || product.status === 'cancelled' || product.status === 'out-for-delivery'}>Pending</option>
+                                                <option value="pending" disabled={product.status === 'shipped' || product.status === 'delivered' || product.status === 'cancelled' || product.status === 'out-for-delivery' || product.status === 'processing'}>Pending</option>
                                                 <option value="processing" disabled={product.status === 'shipped' || product.status === 'delivered' || product.status === 'cancelled' || product.status === 'out-for-delivery'}>Processing</option>
                                                 <option value="shipped" disabled={product.status === 'delivered' || product.status === 'cancelled' || product.status === 'out-for-delivery'}>Shipped</option>
                                                 <option value="out-for-delivery" disabled={product.status === 'delivered' || product.status === 'cancelled'}>Out For Delivery</option>
